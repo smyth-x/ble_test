@@ -16,6 +16,12 @@
     <meta charset="UTF-8">
 </head>
 <body>
+
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+Your browser does not support the HTML canvas tag.
+</canvas>
+
+
     <div class="topnav">
         <h1>JMX24 Web BLE Application</h1>
     </div>
@@ -33,6 +39,9 @@
             <div class="card">
                 <h2>Fetched Value</h2>
                 <p class="reading"><span id="valueContainer">NaN</span></p>
+
+
+
                 <p class="gray-label">Last reading: <span id="timestamp"></span></p>
             </div>
 
@@ -59,6 +68,12 @@
     const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
     const timestampContainer = document.getElementById('timestamp');
+
+	var x_axis=0;
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+
+
 
     //Define BLE Device Specs
     var deviceName ='JMX24';
@@ -133,6 +148,16 @@
             const decodedValue = new TextDecoder().decode(value);
             console.log("Decoded value: ", decodedValue);
             retrievedValue.innerHTML = decodedValue;
+
+
+	
+	ctx.moveTo(x_axis, 0);
+	ctx.lineTo(x_axis, decodedValue);
+	ctx.stroke();
+	x_axis++;
+	if(x_axis>200) x_axis=0;
+
+
         })
         .catch(error => {
             console.log('Error: ', error);
