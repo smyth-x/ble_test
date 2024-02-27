@@ -150,12 +150,6 @@ Your browser does not support the HTML canvas tag.
             retrievedValue.innerHTML = decodedValue;
 
 
-	
-	ctx.moveTo(0, 0);
-	ctx.lineTo(retrievedValue.innerHTML, retrievedValue.innerHTM);
-	ctx.stroke();
-	x_axis++;
-	if(x_axis>200) x_axis=0;
 
 
         })
@@ -176,6 +170,17 @@ Your browser does not support the HTML canvas tag.
         const newValueReceived = new TextDecoder().decode(event.target.value);
         console.log("Characteristic value changed: ", newValueReceived);
         retrievedValue.innerHTML = newValueReceived;
+
+
+	
+	ctx.moveTo(0, 0);
+	ctx.lineTo(newValueReceived, newValueReceived);
+	ctx.stroke();
+	x_axis++;
+	if(x_axis>200) x_axis=0;
+
+
+	    
         timestampContainer.innerHTML = getDateTime();
     }
 
