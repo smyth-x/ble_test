@@ -7,6 +7,8 @@ self.addEventListener('install', event => {
     cache.addAll([
       '',
       'favicon.ico',
+      'manifest.json',
+      'smyth_512.png',
      'index.html',
       'style.css'
     ]);
