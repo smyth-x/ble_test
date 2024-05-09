@@ -12,13 +12,14 @@
 
 <body>
 
-<h10>JMX24 View Port</h10>
-<p>(Bluetooth must be enabled)</p>
+<h1 id="myHeader">JMX24 Remote Viewer</h1>
+<p></p>
 
-<p>  <button id="connectBleButton" class="connectButton"> Connect to JMX24</button> </p>
-  <button id="disconnectBleButton" class="disconnectButton"> Disconnect from JMX24</button>
+<p>  <button id="connectBleButton" class="pbutton"> Connect to JMX24</button> </p>
+<p></p>
+  <button id="disconnectBleButton" class="pbutton" style="background-color:#d13a30"> Disconnect from JMX24</button>
 
-  <p class="gray-label">Mode: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+  <p class="gray-label"><strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
  
   <h2>Data Download</h2>
   <p class="reading"><span id="valueContainer">NaN</span></p>
@@ -26,11 +27,11 @@
 
 
   <p class="gray-label">Last download: <span id="timestamp"></span></p>
-<p>  <button id="onButton" class="onButton">ON</button> </p>
-  <button id="offButton" class="offButton">OFF</button>
-  <p class="gray-label">Last value sent: <span id="valueSent"></span></p>
 
 
+
+
+ 
 
 
 <h1 id="myHeader">
@@ -105,9 +106,10 @@ GPS Active Satellites
 <p><a href="https://smyth-research.com/">Created by Smyth-Research.com</a></p>
 </div>
 
+
 <script>
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+  navigator.serviceWorker.register('/sw.js', { scope: '/' });
 }
 </script>
 
@@ -116,10 +118,10 @@ if('serviceWorker' in navigator) {
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
-    const onButton = document.getElementById('onButton');
-    const offButton = document.getElementById('offButton');
+ //   const onButton = document.getElementById('onButton');
+ //   const offButton = document.getElementById('offButton');
     const retrievedValue = document.getElementById('valueContainer');
-    const latestValueSent = document.getElementById('valueSent');
+ //   const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
     const timestampContainer = document.getElementById('timestamp');
 
@@ -333,8 +335,8 @@ if('serviceWorker' in navigator) {
     disconnectButton.addEventListener('click', disconnectDevice);
 
     // Write to the ESP32 LED Characteristic
-    onButton.addEventListener('click', () => writeOnCharacteristic(1));
-    offButton.addEventListener('click', () => writeOnCharacteristic(1));
+ //   onButton.addEventListener('click', () => writeOnCharacteristic(1));
+ //   offButton.addEventListener('click', () => writeOnCharacteristic(1));
 
     // Check if BLE is available in your Browser
     function isWebBluetoothEnabled() {
@@ -913,7 +915,7 @@ if('serviceWorker' in navigator) {
     }
 
 
-
+/*
     function writeOnCharacteristic(value){
         if (bleServer && bleServer.connected) {
             bleServiceFound.getCharacteristic(ledCharacteristic)
@@ -938,7 +940,7 @@ if('serviceWorker' in navigator) {
             window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
         }
     }
-
+*/
 
 
  
@@ -1065,7 +1067,5 @@ if('serviceWorker' in navigator) {
 
 
 </script>
-
-</html>
 
 </html>
