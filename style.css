@@ -30,8 +30,10 @@ body {
     box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
 }
 button {
-    color: white;
-    padding: 14px 20px;
+    width: 350px;
+font-size: 20px;    
+color: white;
+    padding: 24px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
@@ -73,4 +75,30 @@ font-size: 1.5rem;
 
 .reading {
     font-size: 1.8rem;
+}
+
+
+
+
+.pbutton {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.pbutton:hover {background-color: #3e8e41}
+
+.pbutton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
