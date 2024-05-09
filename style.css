@@ -38,6 +38,18 @@ button {
     border-radius: 4px;
 }
 
+
+#myHeader {
+  background-color: white;
+  color: black;
+  padding-top: 20px;
+  padding-bottom: 0px;
+  text-align: center;
+//	max-width: 600px;
+font-size: 1.5rem;
+}
+
+
 .onButton{
     background-color: #1b8a94;
 }
