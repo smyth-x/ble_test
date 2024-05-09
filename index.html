@@ -19,28 +19,30 @@
 
 <p></p>
 
-<p>  <button id="connectBleButton" class="pbutton"> Connect to JMX24</button> </p>
+<p>  <button id="connectBleButton" class="pbutton"> Connect</button> </p>
 <p></p>
-  <button id="disconnectBleButton" class="pbutton" style="background-color:#d13a30"> Disconnect from JMX24</button>
+  <button id="disconnectBleButton" class="pbutton" style="background-color:#d13a30"> Disconnect</button>
 
-  <p class="gray-label"><strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+<h2 id="myHeader">
  
-  <h2>Data Download</h2>
-  <p class="reading"><span id="valueContainer">NaN</span></p>
+</h2>
 
-
-
-  <p class="gray-label">Last download: <span id="timestamp"></span></p>
-
-
-
-
+  <p class="gray-label"><strong><span id="bleState" style="color:#d13a30; font-size: 25px; ">Disconnected</span></strong></p>
  
 
+  <p id="myHeader">Values downloaded = <span id="bleBytes" style="color:black; font-size: 25px">0</span></p>
 
-<h1 id="myHeader">
+ <h2 id="myHeader">
+ 
+</h2>
+
+
+ 
+
+
+<h2 id="myHeader">
 Microphone Sound Pressure Level (dB)
-</h1>
+</h2>
 
 <canvas id="myCan1" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
@@ -52,52 +54,52 @@ Ambient Light Level (Lux)
 <canvas id="myCan2" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h3 id="myHeader">
+<h2 id="myHeader">
 Air Temperature (°C)
-</h3>
+</h2>
 
 <canvas id="myCan3" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h4 id="myHeader">
+<h2 id="myHeader">
 Relative Air Humidity (%)
-</h4>
+</h2>
 
 <canvas id="myCan4" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h5 id="myHeader">
+<h2 id="myHeader">
 Acceleration (g)
-</h5>
+</h2>
 
 <canvas id="myCan5" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h6 id="myHeader">
+<h2 id="myHeader">
 Ambient Colour CCT (°K)
-</h6>
+</h2>
 
 <canvas id="myCan6" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h6 id="myHeader">
+<h2 id="myHeader">
 Air Pressure (hPa)
-</h6>
+</h2>
 
 <canvas id="myCan7" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
-<h6 id="myHeader">
+<h2 id="myHeader">
 Clock drift (µsec)
-</h6>
+</h2>
 
 <canvas id="myCan8" width="670" height="300" style="border:1px solid white"></canvas>
 <br>
 
 
-<h6 id="myHeader">
+<h2 id="myHeader">
 GPS Active Satellites 
-</h6>
+</h2>
 
 <canvas id="myCan9" width="680" height="680" style="border:1px solid grey"></canvas>
 <br>
@@ -127,6 +129,8 @@ if('serviceWorker' in navigator) {
     const retrievedValue = document.getElementById('valueContainer');
  //   const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
+
+    const bleDataContainer = document.getElementById('bleBytes');
     const timestampContainer = document.getElementById('timestamp');
 
 	var temp = new DataView(new ArrayBuffer(18),0);
@@ -368,8 +372,10 @@ if('serviceWorker' in navigator) {
         })
         .then(device => {
             console.log('Device Selected:', device.name);
-            bleStateContainer.innerHTML = 'Connected to device ' + device.name;
+            bleStateContainer.innerHTML = 'Connected to ' + device.name;
             bleStateContainer.style.color = "#24af37";
+            bleStateContainer.style.fontSize = "25px";
+
             device.addEventListener('gattservicedisconnected', onDisconnected);
             return device.gatt.connect();
         })
@@ -757,9 +763,15 @@ if('serviceWorker' in navigator) {
 //	var x = new DataView(new ArrayBuffer(18),0);
 //	console.log(temp.getUint8(4));
 
+ 
+
+
+
+
 
 
 	temp = event.target.value
+
 
 
 	console.log("Characteristic value array read");
@@ -912,10 +924,13 @@ if('serviceWorker' in navigator) {
 	}
 
 
+        bleDataContainer.style.color = "black";
+        bleDataContainer.style.fontSize = "25px";
+	bleDataContainer.innerHTML = offset;
 
 	if(offset>1088) offset=0;
 
-        timestampContainer.innerHTML = getDateTime();
+ //       timestampContainer.innerHTML = getDateTime();
     }
 
 
