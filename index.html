@@ -1,62 +1,35 @@
-<!--
-  Rui Santos
-  Complete project details at https://RandomNerdTutorials.com/esp32-web-bluetooth/
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
-  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
-
 <!DOCTYPE html>
-<html lang="en-GB">
+<html>
 
 <head>
     <title>JMX24 Web App</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-     
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5"> 
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
 </head>
+
 <body>
 
+<h10>JMX24 View Port</h10>
+<p>(Bluetooth must be enabled)</p>
+
+<p>  <button id="connectBleButton" class="connectButton"> Connect to JMX24</button> </p>
+  <button id="disconnectBleButton" class="disconnectButton"> Disconnect from JMX24</button>
+
+  <p class="gray-label">Mode: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
+ 
+  <h2>Data Download</h2>
+  <p class="reading"><span id="valueContainer">NaN</span></p>
 
 
 
+  <p class="gray-label">Last download: <span id="timestamp"></span></p>
+<p>  <button id="onButton" class="onButton">ON</button> </p>
+  <button id="offButton" class="offButton">OFF</button>
+  <p class="gray-label">Last value sent: <span id="valueSent"></span></p>
 
 
-
-    <div class="topnav">
-        <h1>JMX24 BLE Web Application</h1>
-    </div>
-    <div class="content">
-        <div class="card-grid">
-            <div class="card">
-                <p>
-                    <button id="connectBleButton" class="connectButton"> Connect to JMX24</button>
-                    <button id="disconnectBleButton" class="disconnectButton"> Disconnect from JMX24</button>
-                </p>
-                <p class="gray-label">Mode: <strong><span id="bleState" style="color:#d13a30;">Disconnected</span></strong></p>
-            </div>
-        </div>
-        <div class="card-grid">
-            <div class="card">
-                <h2>Data Download</h2>
-                <p class="reading"><span id="valueContainer">NaN</span></p>
-
-
-
-                <p class="gray-label">Last download: <span id="timestamp"></span></p>
-            </div>
-
-            <div class="card">
-                <h2>Control GPIO 2</h2>
-                <button id="onButton" class="onButton">ON</button>
-                <button id="offButton" class="offButton">OFF</button>
-                <p class="gray-label">Last value sent: <span id="valueSent"></span></p>
-            </div>
-        </div>
-    </div>
 
 
 <h1 id="myHeader">
