@@ -6,7 +6,7 @@
  "screenshots": [
     {
      "src": "jmx24_screenshot.png",
-      "sizes": "1440x720",
+      "sizes": "720x1440",
       "type": "image/png",
       "label": "JMX24 Remote Viewer"
     }
