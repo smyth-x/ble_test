@@ -11,8 +11,8 @@
       "label": "JMX24 Remote Viewer"
     },
     {
-     "src": "jmx24_screenshot2.png",
-      "sizes": "512x512",
+     "src": "jmx24_screenshot_wide.png",
+      "sizes": "1024x512",
       "type": "image/png",
       "form_factor": "wide",
       "label": "JMX Remote Viewer"
