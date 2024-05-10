@@ -21,7 +21,7 @@
   
   "icons": [
     {
-      "src": "smyth_512.png",
+      "src": "jmx_512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
