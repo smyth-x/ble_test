@@ -995,7 +995,10 @@ if('serviceWorker' in navigator) {
 	ctx8.clearRect(20, 259, 640, 20);
 
 
+	offset=0;
+	bleDataContainer.innerHTML = offset;
 
+	    
         if (bleServer && bleServer.connected) {
             if (sensorCharacteristicFound) {
                 sensorCharacteristicFound.stopNotifications()
