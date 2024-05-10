@@ -1,7 +1,7 @@
 {
-  "name": "JMX24 Remote Viewer",
+  "name": "JMX24 View",
   "start_url": "https://smyth-x.github.io/ble_test/",
-  "display": "fullscreen",
+  "display": "standalone",
 
  "screenshots": [
     {
