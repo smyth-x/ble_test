@@ -5,14 +5,14 @@
 
  "screenshots": [
     {
-     "src": "jmx24_screenshot.png",
-      "sizes": "720x1440",
+     "src": "jmx24_screenshot2.png",
+      "sizes": "512x512",
       "type": "image/png",
       "label": "JMX24 Remote Viewer"
     },
     {
-     "src": "jmx24_screenshotPC.png",
-      "sizes": "720x1440",
+     "src": "jmx24_screenshot2.png",
+      "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide",
       "label": "JMX Remote Viewer"
