@@ -1,18 +1,12 @@
 {
-    "lang": "en-GB",
-    "name": "JMX24 View",
-    "short_name": "JMX24",
-    "description": "A bluetooth app that downloads data from a JMX24 logger",
-    "start_url": "/",
-    
-    
-    "orientation": "any",
-    "display": "standalone",
-    "icons": [
-        {
-            "src": "smyth_512.png",
-	   "type": "image/png",
-           "sizes": "512x512"
-        }
-    ]
+  "name": "JMX24 Remote Viewer",
+  "start_url": "https://smyth-x.github.io/ble_test/",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "smyth_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }
