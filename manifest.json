@@ -21,9 +21,21 @@
   
   "icons": [
     {
-      "src": "jmx_512x512.png",
+      "src": "jmx_icon_512.png",
       "type": "image/png",
       "sizes": "512x512",
+       "purpose": "maskable"
+    },
+     {
+      "src": "jmx_icon_150.png",
+      "type": "image/png",
+      "sizes": "150x150",
+       "purpose": "maskable"
+    },
+     {
+      "src": "jmx_icon_48.png",
+      "type": "image/png",
+      "sizes": "48x48",
        "purpose": "maskable"
     }
   ]
