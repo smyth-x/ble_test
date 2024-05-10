@@ -11,7 +11,15 @@
       "label": "JMX24 Remote Viewer"
     }
 ],
-  
+   "screenshots": [
+    {
+     "src": "jmx24_screenshot.png",
+      "sizes": "720x1440",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "JMX Remote Viewer"
+    }
+],
   "icons": [
     {
       "src": "smyth_512.png",
