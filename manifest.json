@@ -2,6 +2,16 @@
   "name": "JMX24 Remote Viewer",
   "start_url": "https://smyth-x.github.io/ble_test/",
   "display": "fullscreen",
+
+ "screenshots": [
+    {
+     "src": "jmx24_screenshot.png",
+      "sizes": "1440x720",
+      "type": "image/png",
+      "label": "JMX24 Remote Viewer"
+    }
+],
+  
   "icons": [
     {
       "src": "smyth_512.png",
