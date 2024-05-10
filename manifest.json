@@ -29,14 +29,12 @@
      {
       "src": "jmx_icon_150.png",
       "type": "image/png",
-      "sizes": "150x150",
-       "purpose": "maskable"
+      "sizes": "150x150"   
     },
      {
       "src": "jmx_icon_48.png",
       "type": "image/png",
-      "sizes": "48x48",
-       "purpose": "maskable"
-    }
+      "sizes": "48x48"
+     }
   ]
 }
