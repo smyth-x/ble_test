@@ -115,7 +115,7 @@ GPS Active Satellites
 
 <script>
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register("/sw.js");
+  navigator.serviceWorker.register('/sw.js', { scope: '/ble_test' });
 }
 </script>
 
