@@ -2,10 +2,12 @@
 <html>
 
 <head>
+
+    <style> body {background-color: #172330;} </style>
     <title>JMX24 Viewer</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=0.5"> 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
 </head>
@@ -13,96 +15,49 @@
 <body>
 
 
-    <div class="topnav">
-        <h1>JMX24 Remote Viewer</h1>
-    </div>
-
-<p></p>
-
-<p>  <button id="connectBleButton" class="pbutton"> Connect</button> </p>
-<p></p>
-  <button id="disconnectBleButton" class="pbutton" style="background-color:#d13a30"> Disconnect</button>
-
-<h2 id="myHeader">
- 
-</h2>
-
-  <p class="gray-label"><strong><span id="bleState" style="color:#d13a30; font-size: 25px; ">Disconnected</span></strong></p>
+    <div class="topnav"><h1>JMX24 Remote Viewer</h1></div>
+    <p><button class="button-30" id="connectBleButton" role="button"><b>View 24hr History</b></button></p>
+   
+   <p id="myHeader"><span id="bleState" style="color:red; font-size: 25px; "><b>Not Paired</b></span></p>
  
 
-  <p id="myHeader">Values downloaded = <span id="bleBytes" style="color:black; font-size: 25px">0</span></p>
+   <p><div id="myProgress"> <div id="myBar"></div> </div></p>
 
- <h2 id="myHeader">
- 
-</h2>
+   <p id="myHeader"><span id="deviceName" style="color:red; font-size: 25px; "> </span></p>
+
+   <h2 id="myHeader"> </h2>
 
 
  
 
 
-<h2 id="myHeader">
-Microphone Sound Pressure Level (dB)
-</h2>
+<h2 id="myHeader">Microphone Sound Pressure Level (dB)</h2>
+<canvas id="myCan1" width="670" height="300" style="border:1px #172330"></canvas>
 
-<canvas id="myCan1" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
+<h2 id="myHeader">Ambient Light Level (Lux)</h2>
+<canvas id="myCan2" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">
-Ambient Light Level (Lux)
-</h2>
+<h2 id="myHeader">Air Temperature (°C)</h2>
+<canvas id="myCan3" width="670" height="300" style="border:1px #172330;"></canvas>
 
-<canvas id="myCan2" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
+<h2 id="myHeader">Relative Air Humidity (%)</h2>
+<canvas id="myCan4" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">
-Air Temperature (°C)
-</h2>
+<h2 id="myHeader">Acceleration (g)</h2>
+<canvas id="myCan5" width="670" height="300" style="border:1px #172330"></canvas>
 
-<canvas id="myCan3" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
+<h2 id="myHeader">Ambient Colour CCT (°K)</h2>
+<canvas id="myCan6" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">
-Relative Air Humidity (%)
-</h2>
+<h2 id="myHeader">Air Pressure (hPa)</h2>
+<canvas id="myCan7" width="670" height="300" style="border:1px #172330"></canvas>
 
-<canvas id="myCan4" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
+<h2 id="myHeader">Clock drift (µsec)</h2>
+<canvas id="myCan8" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">
-Acceleration (g)
-</h2>
-
-<canvas id="myCan5" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
-
-<h2 id="myHeader">
-Ambient Colour CCT (°K)
-</h2>
-
-<canvas id="myCan6" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
-
-<h2 id="myHeader">
-Air Pressure (hPa)
-</h2>
-
-<canvas id="myCan7" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
-
-<h2 id="myHeader">
-Clock drift (µsec)
-</h2>
-
-<canvas id="myCan8" width="670" height="300" style="border:1px solid white"></canvas>
-<br>
-
-
-<h2 id="myHeader">
-GPS Active Satellites 
-</h2>
-
+<h2 id="myHeader">Active GPS Satellites</h2>
 <canvas id="myCan9" width="680" height="680" style="border:1px solid grey"></canvas>
-<br>
+
 
 
 
@@ -119,212 +74,58 @@ if('serviceWorker' in navigator) {
 }
 </script>
 
+
+
 </body>
 <script>
+
     // DOM Elements
     const connectButton = document.getElementById('connectBleButton');
     const disconnectButton = document.getElementById('disconnectBleButton');
- //   const onButton = document.getElementById('onButton');
- //   const offButton = document.getElementById('offButton');
     const retrievedValue = document.getElementById('valueContainer');
- //   const latestValueSent = document.getElementById('valueSent');
     const bleStateContainer = document.getElementById('bleState');
-
     const bleDataContainer = document.getElementById('bleBytes');
     const timestampContainer = document.getElementById('timestamp');
-
-	var temp = new DataView(new ArrayBuffer(18),0);
-	var mic_var = new DataView(new ArrayBuffer(144*8),0);
-	var i,j,k,l,m,n,offset=0,draw_cnt;
-	var hour, hourz1, hourz2, hourz3, hourz4;
-
-	var x_axis=0, old=0;
-
-	var c1 = document.getElementById("myCan1");
-	var ctx1 = c1.getContext("2d");
-	var c2 = document.getElementById("myCan2");
-	var ctx2 = c2.getContext("2d");
-	var c3 = document.getElementById("myCan3");
-	var ctx3 = c3.getContext("2d");
-	var c4 = document.getElementById("myCan4");
-	var ctx4 = c4.getContext("2d");
-
-
-	var c5 = document.getElementById("myCan5");
-	var ctx5 = c5.getContext("2d");
-	var c6 = document.getElementById("myCan6");
-	var ctx6 = c6.getContext("2d");
-	var c7 = document.getElementById("myCan7");
-	var ctx7 = c7.getContext("2d");
-	var c8 = document.getElementById("myCan8");
-	var ctx8 = c8.getContext("2d");
-
-	var c9 = document.getElementById("myCan9");
-	var ctx9 = c9.getContext("2d");
-
-//----------------------------------------------
-	ctx1.lineWidth = 2;
-	ctx1.strokeStyle = "#cacaca";
-	ctx1.strokeRect(60, 1, 576+2, 256+1);
-	ctx1.font = "15px Arial";
-	ctx1.lineWidth = 1;
-	ctx1.fillText("120", 29, 11);   
-	ctx1.fillText("100", 29, 60);   
-	ctx1.fillText("80", 37, 110);   
-	ctx1.fillText("60", 37, 160);   
-	ctx1.fillText("40", 37, 210);   
-   
-  
-//----------------------------------------------
-	ctx2.lineWidth = 2;
-	ctx2.strokeStyle = "#cacaca";
-	ctx2.strokeRect(60, 1, 576+2, 256+1);
-	ctx2.font = "15px Arial";
-	ctx2.lineWidth = 1;
-	ctx2.fillText("100k", 21, 11);   
-	ctx2.fillText("10k", 28, 37);   
-	ctx2.fillText("1k", 35, 69);   
-	ctx2.fillText("100", 27, 101);   
-	ctx2.fillText("10", 35, 133);   
-	ctx2.fillText("1", 42, 165);   
-	ctx2.fillText("0.1", 31, 197);   
-	ctx2.fillText("0.01", 24, 229);   
-  
-
+    const blenameContainer = document.getElementById('deviceName');
  
-//----------------------------------------------
-	ctx3.lineWidth = 2;
-	ctx3.strokeStyle = "#cacaca";
-	ctx3.strokeRect(60, 1, 576+2, 256+1);
-	ctx3.font = "15px Arial";
-	ctx3.lineWidth = 1;
-	ctx3.fillText("30", 35, 11);   
-	ctx3.fillText("25", 35, 37);   
-	ctx3.fillText("20", 35, 69);   
-	ctx3.fillText("15", 35, 101);   
-	ctx3.fillText("10", 35, 133);   
-	ctx3.fillText("5", 40, 165);   
-	ctx3.fillText("0", 40, 197);   
-	ctx3.fillText("-5", 35, 229);   
-  
- 
-//----------------------------------------------
-	ctx4.lineWidth = 2;
-	ctx4.strokeStyle = "#cacaca";
-	ctx4.strokeRect(60, 1, 576+2, 256+1);
-	ctx4.font = "15px Arial";
-	ctx4.lineWidth = 1;
-	ctx4.fillText("100", 28, 11);   
-	ctx4.fillText("90", 35, 37);   
-	ctx4.fillText("80", 35, 69);   
-	ctx4.fillText("70", 35, 101);   
-	ctx4.fillText("60", 35, 133);   
-	ctx4.fillText("50", 35, 165);   
-	ctx4.fillText("40", 35, 197);   
-	ctx4.fillText("30", 35, 229);   
-  
-  
-//----------------------------------------------
-	ctx5.lineWidth = 2;
-	ctx5.strokeStyle = "#cacaca";
-	ctx5.strokeRect(60, 1, 576+2, 256+1);
-	ctx5.font = "15px Arial";
-	ctx5.lineWidth = 1;
-	ctx5.fillText("1.0", 32, 11);   
-	ctx5.fillText("0.75", 24, 37);   
-	ctx5.fillText("0.50", 24, 69);   
-	ctx5.fillText("0.25", 24, 101);   
-	ctx5.fillText("0", 44, 133);   
-	ctx5.fillText("-0.25", 20, 165);   
-	ctx5.fillText("-0.50", 20, 197);   
-	ctx5.fillText("-0.75", 20, 229);   
-  
- 
-//----------------------------------------------
-	ctx6.lineWidth = 2;
-	ctx6.strokeStyle = "#cacaca";
-	ctx6.strokeRect(60, 1, 576+2, 256+1);
-	ctx6.font = "15px Arial";
-	ctx6.lineWidth = 1;
-	ctx6.fillText("10k", 28, 11);   
-	ctx6.fillText("9k", 35, 33);   
-	ctx6.fillText("8k", 35, 62);   
-	ctx6.fillText("7k", 35, 90);   
-	ctx6.fillText("6k", 35, 119);   
-	ctx6.fillText("5k", 35, 147);   
-	ctx6.fillText("4k", 35, 176);   
-	ctx6.fillText("3k", 35, 204);   
-	ctx6.fillText("2k", 35, 233);   
-  
+    var elem = document.getElementById("myBar");
+    var temp = new DataView(new ArrayBuffer(18),0);
+    var mic_var = new DataView(new ArrayBuffer(144*8),0);
+    var i,j,k,l,m,n,offset=0,draw_cnt;
+    var hour, hourz1, hourz2, hourz3, hourz4;
+    var x_axis=0, old=0;
 
-//----------------------------------------------
-	ctx7.lineWidth = 2;
-	ctx7.strokeStyle = "#cacaca";
-	ctx7.strokeRect(60, 1, 576+2, 256+1);
-	ctx7.font = "15px Arial";
-	ctx7.lineWidth = 1;
-	ctx7.fillText("1060", 20, 11);   
-	ctx7.fillText("1040", 20, 37);   
-	ctx7.fillText("1020", 20, 69);   
-	ctx7.fillText("1000", 20, 101);   
-	ctx7.fillText("980", 25, 133);   
-	ctx7.fillText("960", 25, 165);   
-	ctx7.fillText("940", 25, 197);   
-	ctx7.fillText("920", 25, 229);   
-  
+    var c1 = document.getElementById("myCan1");
+    var ctx1 = c1.getContext("2d");
+    var c2 = document.getElementById("myCan2");
+    var ctx2 = c2.getContext("2d");
+    var c3 = document.getElementById("myCan3");
+    var ctx3 = c3.getContext("2d");
+    var c4 = document.getElementById("myCan4");
+    var ctx4 = c4.getContext("2d");
+    var c5 = document.getElementById("myCan5");
+    var ctx5 = c5.getContext("2d");
+    var c6 = document.getElementById("myCan6");
+    var ctx6 = c6.getContext("2d");
+    var c7 = document.getElementById("myCan7");
+    var ctx7 = c7.getContext("2d");
+    var c8 = document.getElementById("myCan8");
+    var ctx8 = c8.getContext("2d");
 
-//----------------------------------------------
-	ctx8.lineWidth = 2;
-	ctx8.strokeStyle = "#cacaca";
-	ctx8.strokeRect(60, 1, 576+2, 256+1);
-	ctx8.font = "15px Arial";
-	ctx8.lineWidth = 1;
-	ctx8.fillText("20", 35, 11);   
-	ctx8.fillText("15", 35, 37);   
-	ctx8.fillText("10", 35, 69);   
-	ctx8.fillText("5", 40, 101);   
-	ctx8.fillText("0", 40, 133);   
-	ctx8.fillText("-5", 35, 165);   
-	ctx8.fillText("-10", 30, 197);   
-	ctx8.fillText("-15", 30, 229);   
-  
+    var c9 = document.getElementById("myCan9");
+    var ctx9 = c9.getContext("2d");
 
 
-//-----------------------------------------------
-
-	ctx9.strokeStyle = "#cacaca";
-	ctx9.beginPath();
-	ctx9.arc(340, 340, 299, 0, 2 * Math.PI);
-	ctx9.stroke();
-
-	ctx9.beginPath();
-	ctx9.arc(340, 340, 149, 0, 2 * Math.PI);
-	ctx9.stroke();
-
-	ctx9.font = "20px Arial";
-	ctx9.lineWidth = 1;
-	ctx9.fillText("N", 330, 30);   
-	ctx9.fillText("S", 330, 670);   
-	ctx9.fillText("E", 650, 350);   
-	ctx9.fillText("W", 10, 350);   
-
-
-
+    initialise_plots();
 
 
 
     //Define BLE Device Specs
-//    var deviceName ='JMX24';
-//    var bleService = '19b10000-e8f2-537e-4f6c-d104768a1214';
-//    var ledCharacteristic = '19b10002-e8f2-537e-4f6c-d104768a1214';
-//    var sensorCharacteristic= '19b10001-e8f2-537e-4f6c-d104768a1214';
 
     var deviceName ='Proteus-e-50016E';
     var bleService = '6e400001-c352-11e5-953d-0002a5d5c51b';
     var ledCharacteristic = '6e400002-c352-11e5-953d-0002a5d5c51b';
     var sensorCharacteristic = '6e400003-c352-11e5-953d-0002a5d5c51b';
-
-
 
 
     //Global Variables to Handle Bluetooth
@@ -342,41 +143,44 @@ if('serviceWorker' in navigator) {
     // Disconnect Button
     disconnectButton.addEventListener('click', disconnectDevice);
 
-    // Write to the ESP32 LED Characteristic
- //   onButton.addEventListener('click', () => writeOnCharacteristic(1));
- //   offButton.addEventListener('click', () => writeOnCharacteristic(1));
+
 
     // Check if BLE is available in your Browser
     function isWebBluetoothEnabled() {
         if (!navigator.bluetooth) {
             console.log('Web Bluetooth API is not available in this browser!');
-            bleStateContainer.innerHTML = "Web Bluetooth API is not available in this browser/device!";
+            bleStateContainer.innerHTML = "Web Bluetooth API is not available in this browser!";
             return false
         }
         console.log('Web Bluetooth API supported in this browser.');
         return true
     }
 
-    // Connect to BLE Device and Enable Notifications
+
+
+
+
+
+    //------------------- Connect to BLE Device and Enable Notifications ----------------------------
+
     function connectToDevice(){
-
-
-
 
         console.log('Initializing Bluetooth...');
         navigator.bluetooth.requestDevice({
-//	acceptAllDevices: true,
-//            filters: [{name: deviceName}],
            filters: [{namePrefix: "JMX24"}],
             optionalServices: [bleService]
         })
         .then(device => {
             console.log('Device Selected:', device.name);
-            bleStateContainer.innerHTML = 'Connected to ' + device.name;
-            bleStateContainer.style.color = "#24af37";
+            bleStateContainer.innerHTML = "<b>Downloading</b>";
+            bleStateContainer.style.color = "white";
             bleStateContainer.style.fontSize = "25px";
+	    blenameContainer.innerHTML = device.name.bold();
+            blenameContainer.style.color = "white";
+            blenameContainer.style.fontSize = "25px";
 
             device.addEventListener('gattservicedisconnected', onDisconnected);
+            device.addEventListener('gattserverdisconnected', ongattserverdisconnected);
             return device.gatt.connect();
         })
         .then(gattServer =>{
@@ -400,40 +204,12 @@ if('serviceWorker' in navigator) {
 
 	offset=0;
 	draw_cnt=0;
+	initialise_plots();
 	getHoursMinutes();
 
 //-------------------------------------------
-	ctx1.fillStyle = "#dfdfdf";
-	
-	ctx1.fillRect(144+60, 1, 1, 256);
-	ctx1.fillRect(288+60, 1, 1, 256);
-	ctx1.fillRect(432+60, 1, 1, 256);
 
-	ctx1.fillRect(24+60, 1, 1, 10);
-	ctx1.fillRect(48+60, 1, 1, 10);
-	ctx1.fillRect(72+60, 1, 1, 10);
-	ctx1.fillRect(96+60, 1, 1, 10);
-	ctx1.fillRect(120+60, 1, 1, 10);
-
-	ctx1.fillRect(168+60, 1, 1, 10);
-	ctx1.fillRect(192+60, 1, 1, 10);
-	ctx1.fillRect(216+60, 1, 1, 10);
-	ctx1.fillRect(240+60, 1, 1, 10);
-	ctx1.fillRect(264+60, 1, 1, 10);
-
-	ctx1.fillRect(312+60, 1, 1, 10);
-	ctx1.fillRect(336+60, 1, 1, 10);
-	ctx1.fillRect(360+60, 1, 1, 10);
-	ctx1.fillRect(384+60, 1, 1, 10);
-	ctx1.fillRect(408+60, 1, 1, 10);
-
-	ctx1.fillRect(456+60, 1, 1, 10);
-	ctx1.fillRect(480+60, 1, 1, 10);
-	ctx1.fillRect(504+60, 1, 1, 10);
-	ctx1.fillRect(528+60, 1, 1, 10);
-	ctx1.fillRect(552+60, 1, 1, 10);
-
-	ctx1.fillStyle = "black";
+	ctx1.fillStyle = "white";
 	ctx1.fillText(hourz4, 40, 274);   
 	ctx1.fillText(hourz3, 184, 274);   
 	ctx1.fillText(hourz2, 328, 274);   
@@ -441,273 +217,62 @@ if('serviceWorker' in navigator) {
 	ctx1.fillText(hour, 618, 274);
 
 //-------------------------------------------
-	ctx2.fillStyle = "#dfdfdf";
-	
-	ctx2.fillRect(144+60, 1, 1, 256);
-	ctx2.fillRect(288+60, 1, 1, 256);
-	ctx2.fillRect(432+60, 1, 1, 256);
 
-	ctx2.fillRect(24+60, 1, 1, 10);
-	ctx2.fillRect(48+60, 1, 1, 10);
-	ctx2.fillRect(72+60, 1, 1, 10);
-	ctx2.fillRect(96+60, 1, 1, 10);
-	ctx2.fillRect(120+60, 1, 1, 10);
-
-	ctx2.fillRect(168+60, 1, 1, 10);
-	ctx2.fillRect(192+60, 1, 1, 10);
-	ctx2.fillRect(216+60, 1, 1, 10);
-	ctx2.fillRect(240+60, 1, 1, 10);
-	ctx2.fillRect(264+60, 1, 1, 10);
-
-	ctx2.fillRect(312+60, 1, 1, 10);
-	ctx2.fillRect(336+60, 1, 1, 10);
-	ctx2.fillRect(360+60, 1, 1, 10);
-	ctx2.fillRect(384+60, 1, 1, 10);
-	ctx2.fillRect(408+60, 1, 1, 10);
-
-	ctx2.fillRect(456+60, 1, 1, 10);
-	ctx2.fillRect(480+60, 1, 1, 10);
-	ctx2.fillRect(504+60, 1, 1, 10);
-	ctx2.fillRect(528+60, 1, 1, 10);
-	ctx2.fillRect(552+60, 1, 1, 10);
-
-	ctx2.fillStyle = "black";
+	ctx2.fillStyle = "white";
 	ctx2.fillText(hourz4, 40, 274);   
 	ctx2.fillText(hourz3, 184, 274);   
 	ctx2.fillText(hourz2, 328, 274);   
 	ctx2.fillText(hourz1, 473, 274);   
 	ctx2.fillText(hour, 618, 274);
 
-
 //-------------------------------------------
-	ctx3.fillStyle = "#dfdfdf";
-	
-	ctx3.fillRect(144+60, 1, 1, 256);
-	ctx3.fillRect(288+60, 1, 1, 256);
-	ctx3.fillRect(432+60, 1, 1, 256);
 
-	ctx3.fillRect(24+60, 1, 1, 10);
-	ctx3.fillRect(48+60, 1, 1, 10);
-	ctx3.fillRect(72+60, 1, 1, 10);
-	ctx3.fillRect(96+60, 1, 1, 10);
-	ctx3.fillRect(120+60, 1, 1, 10);
-
-	ctx3.fillRect(168+60, 1, 1, 10);
-	ctx3.fillRect(192+60, 1, 1, 10);
-	ctx3.fillRect(216+60, 1, 1, 10);
-	ctx3.fillRect(240+60, 1, 1, 10);
-	ctx3.fillRect(264+60, 1, 1, 10);
-
-	ctx3.fillRect(312+60, 1, 1, 10);
-	ctx3.fillRect(336+60, 1, 1, 10);
-	ctx3.fillRect(360+60, 1, 1, 10);
-	ctx3.fillRect(384+60, 1, 1, 10);
-	ctx3.fillRect(408+60, 1, 1, 10);
-
-	ctx3.fillRect(456+60, 1, 1, 10);
-	ctx3.fillRect(480+60, 1, 1, 10);
-	ctx3.fillRect(504+60, 1, 1, 10);
-	ctx3.fillRect(528+60, 1, 1, 10);
-	ctx3.fillRect(552+60, 1, 1, 10);
-
-	ctx3.fillStyle = "black";
+	ctx3.fillStyle = "white";
 	ctx3.fillText(hourz4, 40, 274);   
 	ctx3.fillText(hourz3, 184, 274);   
 	ctx3.fillText(hourz2, 328, 274);   
 	ctx3.fillText(hourz1, 473, 274);   
 	ctx3.fillText(hour, 618, 274);
 
-
 //-------------------------------------------
-	ctx4.fillStyle = "#dfdfdf";
-	
-	ctx4.fillRect(144+60, 1, 1, 256);
-	ctx4.fillRect(288+60, 1, 1, 256);
-	ctx4.fillRect(432+60, 1, 1, 256);
 
-	ctx4.fillRect(24+60, 1, 1, 10);
-	ctx4.fillRect(48+60, 1, 1, 10);
-	ctx4.fillRect(72+60, 1, 1, 10);
-	ctx4.fillRect(96+60, 1, 1, 10);
-	ctx4.fillRect(120+60, 1, 1, 10);
-
-	ctx4.fillRect(168+60, 1, 1, 10);
-	ctx4.fillRect(192+60, 1, 1, 10);
-	ctx4.fillRect(216+60, 1, 1, 10);
-	ctx4.fillRect(240+60, 1, 1, 10);
-	ctx4.fillRect(264+60, 1, 1, 10);
-
-	ctx4.fillRect(312+60, 1, 1, 10);
-	ctx4.fillRect(336+60, 1, 1, 10);
-	ctx4.fillRect(360+60, 1, 1, 10);
-	ctx4.fillRect(384+60, 1, 1, 10);
-	ctx4.fillRect(408+60, 1, 1, 10);
-
-	ctx4.fillRect(456+60, 1, 1, 10);
-	ctx4.fillRect(480+60, 1, 1, 10);
-	ctx4.fillRect(504+60, 1, 1, 10);
-	ctx4.fillRect(528+60, 1, 1, 10);
-	ctx4.fillRect(552+60, 1, 1, 10);
-
-	ctx4.fillStyle = "black";
+	ctx4.fillStyle = "white";
 	ctx4.fillText(hourz4, 40, 274);   
 	ctx4.fillText(hourz3, 184, 274);   
 	ctx4.fillText(hourz2, 328, 274);   
 	ctx4.fillText(hourz1, 473, 274);   
 	ctx4.fillText(hour, 618, 274);
 
-
 //-------------------------------------------
-	ctx5.fillStyle = "#dfdfdf";
-	
-	ctx5.fillRect(144+60, 1, 1, 256);
-	ctx5.fillRect(288+60, 1, 1, 256);
-	ctx5.fillRect(432+60, 1, 1, 256);
 
-	ctx5.fillRect(24+60, 1, 1, 10);
-	ctx5.fillRect(48+60, 1, 1, 10);
-	ctx5.fillRect(72+60, 1, 1, 10);
-	ctx5.fillRect(96+60, 1, 1, 10);
-	ctx5.fillRect(120+60, 1, 1, 10);
-
-	ctx5.fillRect(168+60, 1, 1, 10);
-	ctx5.fillRect(192+60, 1, 1, 10);
-	ctx5.fillRect(216+60, 1, 1, 10);
-	ctx5.fillRect(240+60, 1, 1, 10);
-	ctx5.fillRect(264+60, 1, 1, 10);
-
-	ctx5.fillRect(312+60, 1, 1, 10);
-	ctx5.fillRect(336+60, 1, 1, 10);
-	ctx5.fillRect(360+60, 1, 1, 10);
-	ctx5.fillRect(384+60, 1, 1, 10);
-	ctx5.fillRect(408+60, 1, 1, 10);
-
-	ctx5.fillRect(456+60, 1, 1, 10);
-	ctx5.fillRect(480+60, 1, 1, 10);
-	ctx5.fillRect(504+60, 1, 1, 10);
-	ctx5.fillRect(528+60, 1, 1, 10);
-	ctx5.fillRect(552+60, 1, 1, 10);
-
-	ctx5.fillStyle = "black";
+	ctx5.fillStyle = "white";
 	ctx5.fillText(hourz4, 40, 274);   
 	ctx5.fillText(hourz3, 184, 274);   
 	ctx5.fillText(hourz2, 328, 274);   
 	ctx5.fillText(hourz1, 473, 274);   
 	ctx5.fillText(hour, 618, 274);
 
-
 //-------------------------------------------
-	ctx6.fillStyle = "#dfdfdf";
-	
-	ctx6.fillRect(144+60, 1, 1, 256);
-	ctx6.fillRect(288+60, 1, 1, 256);
-	ctx6.fillRect(432+60, 1, 1, 256);
 
-	ctx6.fillRect(24+60, 1, 1, 10);
-	ctx6.fillRect(48+60, 1, 1, 10);
-	ctx6.fillRect(72+60, 1, 1, 10);
-	ctx6.fillRect(96+60, 1, 1, 10);
-	ctx6.fillRect(120+60, 1, 1, 10);
-
-	ctx6.fillRect(168+60, 1, 1, 10);
-	ctx6.fillRect(192+60, 1, 1, 10);
-	ctx6.fillRect(216+60, 1, 1, 10);
-	ctx6.fillRect(240+60, 1, 1, 10);
-	ctx6.fillRect(264+60, 1, 1, 10);
-
-	ctx6.fillRect(312+60, 1, 1, 10);
-	ctx6.fillRect(336+60, 1, 1, 10);
-	ctx6.fillRect(360+60, 1, 1, 10);
-	ctx6.fillRect(384+60, 1, 1, 10);
-	ctx6.fillRect(408+60, 1, 1, 10);
-
-	ctx6.fillRect(456+60, 1, 1, 10);
-	ctx6.fillRect(480+60, 1, 1, 10);
-	ctx6.fillRect(504+60, 1, 1, 10);
-	ctx6.fillRect(528+60, 1, 1, 10);
-	ctx6.fillRect(552+60, 1, 1, 10);
-
-	ctx6.fillStyle = "black";
+	ctx6.fillStyle = "white";
 	ctx6.fillText(hourz4, 40, 274);   
 	ctx6.fillText(hourz3, 184, 274);   
 	ctx6.fillText(hourz2, 328, 274);   
 	ctx6.fillText(hourz1, 473, 274);   
 	ctx6.fillText(hour, 618, 274);
 
-
-
-
 //-------------------------------------------
-	ctx7.fillStyle = "#dfdfdf";
-	
-	ctx7.fillRect(144+60, 1, 1, 256);
-	ctx7.fillRect(288+60, 1, 1, 256);
-	ctx7.fillRect(432+60, 1, 1, 256);
 
-	ctx7.fillRect(24+60, 1, 1, 10);
-	ctx7.fillRect(48+60, 1, 1, 10);
-	ctx7.fillRect(72+60, 1, 1, 10);
-	ctx7.fillRect(96+60, 1, 1, 10);
-	ctx7.fillRect(120+60, 1, 1, 10);
-
-	ctx7.fillRect(168+60, 1, 1, 10);
-	ctx7.fillRect(192+60, 1, 1, 10);
-	ctx7.fillRect(216+60, 1, 1, 10);
-	ctx7.fillRect(240+60, 1, 1, 10);
-	ctx7.fillRect(264+60, 1, 1, 10);
-
-	ctx7.fillRect(312+60, 1, 1, 10);
-	ctx7.fillRect(336+60, 1, 1, 10);
-	ctx7.fillRect(360+60, 1, 1, 10);
-	ctx7.fillRect(384+60, 1, 1, 10);
-	ctx7.fillRect(408+60, 1, 1, 10);
-
-	ctx7.fillRect(456+60, 1, 1, 10);
-	ctx7.fillRect(480+60, 1, 1, 10);
-	ctx7.fillRect(504+60, 1, 1, 10);
-	ctx7.fillRect(528+60, 1, 1, 10);
-	ctx7.fillRect(552+60, 1, 1, 10);
-
-	ctx7.fillStyle = "black";
+	ctx7.fillStyle = "white";
 	ctx7.fillText(hourz4, 40, 274);   
 	ctx7.fillText(hourz3, 184, 274);   
 	ctx7.fillText(hourz2, 328, 274);   
 	ctx7.fillText(hourz1, 473, 274);   
 	ctx7.fillText(hour, 618, 274);
 
-
 //-------------------------------------------
-	ctx8.fillStyle = "#dfdfdf";
-	
-	ctx8.fillRect(144+60, 1, 1, 256);
-	ctx8.fillRect(288+60, 1, 1, 256);
-	ctx8.fillRect(432+60, 1, 1, 256);
 
-	ctx8.fillRect(24+60, 1, 1, 10);
-	ctx8.fillRect(48+60, 1, 1, 10);
-	ctx8.fillRect(72+60, 1, 1, 10);
-	ctx8.fillRect(96+60, 1, 1, 10);
-	ctx8.fillRect(120+60, 1, 1, 10);
-
-	ctx8.fillRect(168+60, 1, 1, 10);
-	ctx8.fillRect(192+60, 1, 1, 10);
-	ctx8.fillRect(216+60, 1, 1, 10);
-	ctx8.fillRect(240+60, 1, 1, 10);
-	ctx8.fillRect(264+60, 1, 1, 10);
-
-	ctx8.fillRect(312+60, 1, 1, 10);
-	ctx8.fillRect(336+60, 1, 1, 10);
-	ctx8.fillRect(360+60, 1, 1, 10);
-	ctx8.fillRect(384+60, 1, 1, 10);
-	ctx8.fillRect(408+60, 1, 1, 10);
-
-	ctx8.fillRect(456+60, 1, 1, 10);
-	ctx8.fillRect(480+60, 1, 1, 10);
-	ctx8.fillRect(504+60, 1, 1, 10);
-	ctx8.fillRect(528+60, 1, 1, 10);
-	ctx8.fillRect(552+60, 1, 1, 10);
-
-	ctx8.fillStyle = "black";
+	ctx8.fillStyle = "white";
 	ctx8.fillText(hourz4, 40, 274);   
 	ctx8.fillText(hourz3, 184, 274);   
 	ctx8.fillText(hourz2, 328, 274);   
@@ -715,15 +280,7 @@ if('serviceWorker' in navigator) {
 	ctx8.fillText(hour, 618, 274);
 
 
-
-
-
-
-
-
-
-
-            return;// characteristic.readValue();
+        return;
         })
         .then(value => {
             console.log("Read value: ", value);
@@ -739,41 +296,30 @@ if('serviceWorker' in navigator) {
         })
     }
 
+
+//------- haven't seen this being called ------------------
     function onDisconnected(event){
-        console.log('Device Disconnected:', event.target.device.name);
-        bleStateContainer.innerHTML = "Device disconnected";
+        console.log('Disconnected', event.target.device.name);
+        bleStateContainer.innerHTML = "Disconnected";
         bleStateContainer.style.color = "#d13a30";
-
-
         connectToDevice();
     }
 
 
-// incoming data 
+//---------- called when JMX24 activates a disconnect ---------
+   function ongattserverdisconnected(event){
+        console.log('Remote server has disconnected');
+        bleStateContainer.innerHTML = "<b>Complete</b>";
+        bleStateContainer.style.color = "white";
+    }
+
+
+
+//-------------------- incoming data ------------------------------------
 
     function handleCharacteristicChange(event){
 
-
-//      const newValueReceived = new TextDecoder().decode(event.target.value);
-//      console.log("Characteristic value changed: ", newValueReceived);
-//      retrievedValue.innerHTML = newValueReceived;
-//	const buffer = new ArrayBuffer(17);
-//	const view = new Int8Array(buffer);
-//	view = event.target.value
-//	var x = new DataView(new ArrayBuffer(18),0);
-//	console.log(temp.getUint8(4));
-
- 
-
-
-
-
-
-
 	temp = event.target.value
-
-
-
 	console.log("Characteristic value array read");
 	console.log("number of new bytes: ", temp.byteLength);
 	console.log("current offset: ", offset);
@@ -792,13 +338,13 @@ if('serviceWorker' in navigator) {
 	{
 
 		j=61;
-		for(var i=0;i<144;i++)
+		for(var i=0;i<144;i++) //draw SPL
 		{
 			k=mic_var[i];
 			if(k==0xff) k=0;
 			m=j+3;
 			ctx1.rect(j, 257, 4, -k);
-			ctx1.fillStyle="#555555";
+			ctx1.fillStyle="white";
 			ctx1.fill();
 			j=j+4;
 		}
@@ -806,7 +352,7 @@ if('serviceWorker' in navigator) {
 	}
 
 
-	if((offset>=288)&&(draw_cnt==1));
+	if((offset>=288)&&(draw_cnt==1)); //draw LUX
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -814,7 +360,7 @@ if('serviceWorker' in navigator) {
 			k=mic_var[i+144];
 			if(k==0xff) k=0;
 			ctx2.rect(j, 257, 4, -k);
-			ctx2.fillStyle="#555555";
+			ctx2.fillStyle="white";
 			ctx2.fill();
 			j=j+4;
 		}
@@ -822,7 +368,7 @@ if('serviceWorker' in navigator) {
 	}
 
 
-	if((offset>=432)&&(draw_cnt==2))
+	if((offset>=432)&&(draw_cnt==2)) //draw Temp
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -830,7 +376,7 @@ if('serviceWorker' in navigator) {
 			k=mic_var[i+288];
 			if(k==0xff) k=0;
 			ctx3.rect(j, 257, 4, -k);
-			ctx3.fillStyle="#555555";
+			ctx3.fillStyle="white";
 			ctx3.fill();
 			j=j+4;
 		}
@@ -838,7 +384,7 @@ if('serviceWorker' in navigator) {
 	}
 
 
-	if((offset>=576)&&(draw_cnt==3))
+	if((offset>=576)&&(draw_cnt==3)) //Draw RH
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -846,7 +392,7 @@ if('serviceWorker' in navigator) {
 			k=mic_var[i+432];
 			if(k==0xff) k=0;
 			ctx4.rect(j, 257, 4, -k);
-			ctx4.fillStyle="#555555";
+			ctx4.fillStyle="white";
 			ctx4.fill();
 			j=j+4;
 		}
@@ -854,7 +400,7 @@ if('serviceWorker' in navigator) {
 	}
 
 
-	if((offset>=720)&&(draw_cnt==4))
+	if((offset>=720)&&(draw_cnt==4)) //Draw ACCEL
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -863,7 +409,7 @@ if('serviceWorker' in navigator) {
 			if(k==128) k=127;
 			if(k==0) ctx5.rect(j, 127, 4, 0);			
 			else ctx5.rect(j, 127, 4, 128-k);
-			ctx5.fillStyle="#555555";
+			ctx5.fillStyle="white";
 			ctx5.fill();
 			j=j+4;
 		}
@@ -873,7 +419,7 @@ if('serviceWorker' in navigator) {
 
 
 
-	if((offset>=864)&&(draw_cnt==5))
+	if((offset>=864)&&(draw_cnt==5)) //draw CCT
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -881,7 +427,7 @@ if('serviceWorker' in navigator) {
 			k=mic_var[i+720];
 			if(k==0xff) k=0;
 			ctx6.rect(j, 257, 4, -k);
-			ctx6.fillStyle="#555555";
+			ctx6.fillStyle="white";
 			ctx6.fill();
 			j=j+4;
 		}
@@ -890,7 +436,7 @@ if('serviceWorker' in navigator) {
 
 
 
-	if((offset>=1008)&&(draw_cnt==6))
+	if((offset>=1008)&&(draw_cnt==6)) //draw PRESS
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -898,7 +444,7 @@ if('serviceWorker' in navigator) {
 			k=mic_var[i+864];
 			if(k==0xff) k=0;
 			ctx7.rect(j, 257, 4, -k);
-			ctx7.fillStyle="#555555";
+			ctx7.fillStyle="white";
 			ctx7.fill();
 			j=j+4;
 		}
@@ -907,7 +453,7 @@ if('serviceWorker' in navigator) {
 
 
 
-	if((offset>=1152)&&(draw_cnt==7))
+	if((offset>=1152)&&(draw_cnt==7)) //draw clk drift
 	{
 		j=61;
 		for(var i=0;i<144;i++)
@@ -916,7 +462,7 @@ if('serviceWorker' in navigator) {
 			if(k==128) k=127;
 			if(k==0) ctx8.rect(j, 127, 4, 0);			
 			else ctx8.rect(j, 127, 4, 128-k);
-			ctx8.fillStyle="#555555";
+			ctx8.fillStyle="white";
 			ctx8.fill();
 			j=j+4;
 		}
@@ -924,47 +470,18 @@ if('serviceWorker' in navigator) {
 	}
 
 
-        bleDataContainer.style.color = "black";
-        bleDataContainer.style.fontSize = "25px";
-	bleDataContainer.innerHTML = offset;
-
+   	
+	elem.style.width = ((offset*350)/1150) + "px";
 	if(offset>1088) offset=0;
 
  //       timestampContainer.innerHTML = getDateTime();
     }
 
 
-/*
-    function writeOnCharacteristic(value){
-        if (bleServer && bleServer.connected) {
-            bleServiceFound.getCharacteristic(ledCharacteristic)
-            .then(characteristic => {
-                console.log("Found the LED characteristic: ", characteristic.uuid);
-                //const data = new Uint8Array([value]);
-                //return characteristic.writeValue(data);
-
-		let data = new Uint8Array([1,1,2,3,4,5,6,7,8]);
-//		return characteristic.writeValue(data);
-		return characteristic.writeValueWithoutResponse(data);
-            })
-            .then(() => {
-                latestValueSent.innerHTML = value;
-                console.log("Value written to LEDcharacteristic:", value);
-            })
-            .catch(error => {
-                console.error("Error writing to the LED characteristic: ", error);
-            });
-        } else {
-            console.error ("Bluetooth is not connected. Cannot write to characteristic.")
-            window.alert("Bluetooth is not connected. Cannot write to characteristic. \n Connect to BLE first!")
-        }
-    }
-*/
-
-
  
 
 
+//------------------------------------------------------------
 
     function disconnectDevice() {
         console.log("Disconnect Device.");
@@ -994,11 +511,9 @@ if('serviceWorker' in navigator) {
 	ctx8.clearRect(61, 2, 576, 255);
 	ctx8.clearRect(20, 259, 640, 20);
 
-
 	offset=0;
 	bleDataContainer.innerHTML = offset;
 
-	    
         if (bleServer && bleServer.connected) {
             if (sensorCharacteristicFound) {
                 sensorCharacteristicFound.stopNotifications()
@@ -1008,8 +523,8 @@ if('serviceWorker' in navigator) {
                     })
                     .then(() => {
                         console.log("Device Disconnected");
-                        bleStateContainer.innerHTML = "Device Disconnected";
-                        bleStateContainer.style.color = "#d13a30";
+                        bleStateContainer.innerHTML = "Disconnected";
+                        bleStateContainer.style.color = "red";
 
                     })
                     .catch(error => {
@@ -1025,6 +540,7 @@ if('serviceWorker' in navigator) {
         }
     }
 
+//---------------------------------------------------------------------
     function getDateTime() {
         var currentdate = new Date();
         var day = ("00" + currentdate.getDate()).slice(-2); // Convert day to string and slice
@@ -1038,6 +554,7 @@ if('serviceWorker' in navigator) {
         return datetime;
     }
 
+//-------------------------------------------------------------------
     function getHoursMinutes() {
         var currentdate = new Date();
         var hours = ("00" + currentdate.getHours()).slice(-2);
@@ -1085,6 +602,419 @@ if('serviceWorker' in navigator) {
 	}
 
     }
+
+
+
+
+//=============================================================
+// Draws plot boxes + annotation
+//=============================================================
+
+
+    function initialise_plots(){
+
+	offset=0;
+	elem.style.width = ((offset*350)/1150) + "px";
+
+
+//------------------------------------------------
+
+	ctx1.clearRect(20, 259, 645, 20);
+	ctx1.fillStyle="#2A4059";
+	ctx1.fillRect(60,1,578,257);
+	ctx1.font = "15px Arial";
+	ctx1.lineWidth = 1;
+	ctx1.fillStyle="white";
+	ctx1.fillText("120", 29, 11);   
+	ctx1.fillText("100", 29, 60);   
+	ctx1.fillText("80", 37, 110);   
+	ctx1.fillText("60", 37, 160);   
+	ctx1.fillText("40", 37, 210);   
+    
+	ctx1.fillStyle = "black";
+	
+	ctx1.fillRect(144+60, 1, 1, 256);
+	ctx1.fillRect(288+60, 1, 1, 256);
+	ctx1.fillRect(432+60, 1, 1, 256);
+
+	ctx1.fillRect(24+60, 1, 1, 10);
+	ctx1.fillRect(48+60, 1, 1, 10);
+	ctx1.fillRect(72+60, 1, 1, 10);
+	ctx1.fillRect(96+60, 1, 1, 10);
+	ctx1.fillRect(120+60, 1, 1, 10);
+
+	ctx1.fillRect(168+60, 1, 1, 10);
+	ctx1.fillRect(192+60, 1, 1, 10);
+	ctx1.fillRect(216+60, 1, 1, 10);
+	ctx1.fillRect(240+60, 1, 1, 10);
+	ctx1.fillRect(264+60, 1, 1, 10);
+
+	ctx1.fillRect(312+60, 1, 1, 10);
+	ctx1.fillRect(336+60, 1, 1, 10);
+	ctx1.fillRect(360+60, 1, 1, 10);
+	ctx1.fillRect(384+60, 1, 1, 10);
+	ctx1.fillRect(408+60, 1, 1, 10);
+
+	ctx1.fillRect(456+60, 1, 1, 10);
+	ctx1.fillRect(480+60, 1, 1, 10);
+	ctx1.fillRect(504+60, 1, 1, 10);
+	ctx1.fillRect(528+60, 1, 1, 10);
+	ctx1.fillRect(552+60, 1, 1, 10);
+
+
+//----------------------------------------------
+
+	ctx2.clearRect(20, 259, 645, 20);
+	ctx2.fillStyle = "#2A4059";
+	ctx2.fillRect(60, 1, 578, 257);
+	ctx2.font = "15px Arial";
+	ctx2.lineWidth = 1;
+        ctx2.fillStyle="white";
+	ctx2.fillText("100k", 21, 11);   
+	ctx2.fillText("10k", 28, 37);   
+	ctx2.fillText("1k", 35, 69);   
+	ctx2.fillText("100", 27, 101);   
+	ctx2.fillText("10", 35, 133);   
+	ctx2.fillText("1", 42, 165);   
+	ctx2.fillText("0.1", 31, 197);   
+	ctx2.fillText("0.01", 24, 229);   
+  
+	ctx2.fillStyle = "black";
+	
+	ctx2.fillRect(144+60, 1, 1, 256);
+	ctx2.fillRect(288+60, 1, 1, 256);
+	ctx2.fillRect(432+60, 1, 1, 256);
+
+	ctx2.fillRect(24+60, 1, 1, 10);
+	ctx2.fillRect(48+60, 1, 1, 10);
+	ctx2.fillRect(72+60, 1, 1, 10);
+	ctx2.fillRect(96+60, 1, 1, 10);
+	ctx2.fillRect(120+60, 1, 1, 10);
+
+	ctx2.fillRect(168+60, 1, 1, 10);
+	ctx2.fillRect(192+60, 1, 1, 10);
+	ctx2.fillRect(216+60, 1, 1, 10);
+	ctx2.fillRect(240+60, 1, 1, 10);
+	ctx2.fillRect(264+60, 1, 1, 10);
+
+	ctx2.fillRect(312+60, 1, 1, 10);
+	ctx2.fillRect(336+60, 1, 1, 10);
+	ctx2.fillRect(360+60, 1, 1, 10);
+	ctx2.fillRect(384+60, 1, 1, 10);
+	ctx2.fillRect(408+60, 1, 1, 10);
+
+	ctx2.fillRect(456+60, 1, 1, 10);
+	ctx2.fillRect(480+60, 1, 1, 10);
+	ctx2.fillRect(504+60, 1, 1, 10);
+	ctx2.fillRect(528+60, 1, 1, 10);
+	ctx2.fillRect(552+60, 1, 1, 10);
+
+
+//----------------------------------------------
+
+	ctx3.clearRect(20, 259, 640, 20);
+	ctx3.fillStyle = "#2A4059";
+	ctx3.fillRect(60, 1, 578, 257);
+	ctx3.font = "15px Arial";
+	ctx3.lineWidth = 1;
+        ctx3.fillStyle="white";
+	ctx3.fillText("30", 35, 11);   
+	ctx3.fillText("25", 35, 37);   
+	ctx3.fillText("20", 35, 69);   
+	ctx3.fillText("15", 35, 101);   
+	ctx3.fillText("10", 35, 133);   
+	ctx3.fillText("5", 40, 165);   
+	ctx3.fillText("0", 40, 197);   
+	ctx3.fillText("-5", 35, 229);   
+  
+	ctx3.fillStyle = "black";
+	
+	ctx3.fillRect(144+60, 1, 1, 256);
+	ctx3.fillRect(288+60, 1, 1, 256);
+	ctx3.fillRect(432+60, 1, 1, 256);
+
+	ctx3.fillRect(24+60, 1, 1, 10);
+	ctx3.fillRect(48+60, 1, 1, 10);
+	ctx3.fillRect(72+60, 1, 1, 10);
+	ctx3.fillRect(96+60, 1, 1, 10);
+	ctx3.fillRect(120+60, 1, 1, 10);
+
+	ctx3.fillRect(168+60, 1, 1, 10);
+	ctx3.fillRect(192+60, 1, 1, 10);
+	ctx3.fillRect(216+60, 1, 1, 10);
+	ctx3.fillRect(240+60, 1, 1, 10);
+	ctx3.fillRect(264+60, 1, 1, 10);
+
+	ctx3.fillRect(312+60, 1, 1, 10);
+	ctx3.fillRect(336+60, 1, 1, 10);
+	ctx3.fillRect(360+60, 1, 1, 10);
+	ctx3.fillRect(384+60, 1, 1, 10);
+	ctx3.fillRect(408+60, 1, 1, 10);
+
+	ctx3.fillRect(456+60, 1, 1, 10);
+	ctx3.fillRect(480+60, 1, 1, 10);
+	ctx3.fillRect(504+60, 1, 1, 10);
+	ctx3.fillRect(528+60, 1, 1, 10);
+	ctx3.fillRect(552+60, 1, 1, 10);
+
+
+//----------------------------------------------
+
+	ctx4.clearRect(20, 259, 640, 20);
+	ctx4.fillStyle = "#2A4059";
+	ctx4.fillRect(60, 1, 578, 257);
+	ctx4.font = "15px Arial";
+	ctx4.lineWidth = 1;
+        ctx4.fillStyle="white";
+	ctx4.fillText("100", 28, 11);   
+	ctx4.fillText("90", 35, 37);   
+	ctx4.fillText("80", 35, 69);   
+	ctx4.fillText("70", 35, 101);   
+	ctx4.fillText("60", 35, 133);   
+	ctx4.fillText("50", 35, 165);   
+	ctx4.fillText("40", 35, 197);   
+	ctx4.fillText("30", 35, 229);   
+  
+ 	ctx4.fillStyle = "black";
+	
+	ctx4.fillRect(144+60, 1, 1, 256);
+	ctx4.fillRect(288+60, 1, 1, 256);
+	ctx4.fillRect(432+60, 1, 1, 256);
+
+	ctx4.fillRect(24+60, 1, 1, 10);
+	ctx4.fillRect(48+60, 1, 1, 10);
+	ctx4.fillRect(72+60, 1, 1, 10);
+	ctx4.fillRect(96+60, 1, 1, 10);
+	ctx4.fillRect(120+60, 1, 1, 10);
+
+	ctx4.fillRect(168+60, 1, 1, 10);
+	ctx4.fillRect(192+60, 1, 1, 10);
+	ctx4.fillRect(216+60, 1, 1, 10);
+	ctx4.fillRect(240+60, 1, 1, 10);
+	ctx4.fillRect(264+60, 1, 1, 10);
+
+	ctx4.fillRect(312+60, 1, 1, 10);
+	ctx4.fillRect(336+60, 1, 1, 10);
+	ctx4.fillRect(360+60, 1, 1, 10);
+	ctx4.fillRect(384+60, 1, 1, 10);
+	ctx4.fillRect(408+60, 1, 1, 10);
+
+	ctx4.fillRect(456+60, 1, 1, 10);
+	ctx4.fillRect(480+60, 1, 1, 10);
+	ctx4.fillRect(504+60, 1, 1, 10);
+	ctx4.fillRect(528+60, 1, 1, 10);
+	ctx4.fillRect(552+60, 1, 1, 10); 
+
+//----------------------------------------------
+
+	ctx5.clearRect(20, 259, 640, 20);
+	ctx5.fillStyle = "#2A4059";
+	ctx5.fillRect(60, 1, 578, 257);
+	ctx5.font = "15px Arial";
+	ctx5.lineWidth = 1;
+        ctx5.fillStyle="white";
+	ctx5.fillText("1.0", 32, 11);   
+	ctx5.fillText("0.75", 24, 37);   
+	ctx5.fillText("0.50", 24, 69);   
+	ctx5.fillText("0.25", 24, 101);   
+	ctx5.fillText("0", 44, 133);   
+	ctx5.fillText("-0.25", 20, 165);   
+	ctx5.fillText("-0.50", 20, 197);   
+	ctx5.fillText("-0.75", 20, 229);   
+  
+	ctx5.fillStyle = "black";
+	
+	ctx5.fillRect(144+60, 1, 1, 256);
+	ctx5.fillRect(288+60, 1, 1, 256);
+	ctx5.fillRect(432+60, 1, 1, 256);
+
+	ctx5.fillRect(24+60, 1, 1, 10);
+	ctx5.fillRect(48+60, 1, 1, 10);
+	ctx5.fillRect(72+60, 1, 1, 10);
+	ctx5.fillRect(96+60, 1, 1, 10);
+	ctx5.fillRect(120+60, 1, 1, 10);
+
+	ctx5.fillRect(168+60, 1, 1, 10);
+	ctx5.fillRect(192+60, 1, 1, 10);
+	ctx5.fillRect(216+60, 1, 1, 10);
+	ctx5.fillRect(240+60, 1, 1, 10);
+	ctx5.fillRect(264+60, 1, 1, 10);
+
+	ctx5.fillRect(312+60, 1, 1, 10);
+	ctx5.fillRect(336+60, 1, 1, 10);
+	ctx5.fillRect(360+60, 1, 1, 10);
+	ctx5.fillRect(384+60, 1, 1, 10);
+	ctx5.fillRect(408+60, 1, 1, 10);
+
+	ctx5.fillRect(456+60, 1, 1, 10);
+	ctx5.fillRect(480+60, 1, 1, 10);
+	ctx5.fillRect(504+60, 1, 1, 10);
+	ctx5.fillRect(528+60, 1, 1, 10);
+	ctx5.fillRect(552+60, 1, 1, 10); 
+
+//----------------------------------------------
+
+	ctx6.clearRect(20, 259, 640, 20);
+	ctx6.fillStyle = "#2A4059";
+	ctx6.fillRect(60, 1, 578, 257);
+	ctx6.font = "15px Arial";
+	ctx6.lineWidth = 1;
+        ctx6.fillStyle="white";
+	ctx6.fillText("10k", 28, 11);   
+	ctx6.fillText("9k", 35, 33);   
+	ctx6.fillText("8k", 35, 62);   
+	ctx6.fillText("7k", 35, 90);   
+	ctx6.fillText("6k", 35, 119);   
+	ctx6.fillText("5k", 35, 147);   
+	ctx6.fillText("4k", 35, 176);   
+	ctx6.fillText("3k", 35, 204);   
+	ctx6.fillText("2k", 35, 233);   
+  
+	ctx6.fillStyle = "black";
+	
+	ctx6.fillRect(144+60, 1, 1, 256);
+	ctx6.fillRect(288+60, 1, 1, 256);
+	ctx6.fillRect(432+60, 1, 1, 256);
+
+	ctx6.fillRect(24+60, 1, 1, 10);
+	ctx6.fillRect(48+60, 1, 1, 10);
+	ctx6.fillRect(72+60, 1, 1, 10);
+	ctx6.fillRect(96+60, 1, 1, 10);
+	ctx6.fillRect(120+60, 1, 1, 10);
+
+	ctx6.fillRect(168+60, 1, 1, 10);
+	ctx6.fillRect(192+60, 1, 1, 10);
+	ctx6.fillRect(216+60, 1, 1, 10);
+	ctx6.fillRect(240+60, 1, 1, 10);
+	ctx6.fillRect(264+60, 1, 1, 10);
+
+	ctx6.fillRect(312+60, 1, 1, 10);
+	ctx6.fillRect(336+60, 1, 1, 10);
+	ctx6.fillRect(360+60, 1, 1, 10);
+	ctx6.fillRect(384+60, 1, 1, 10);
+	ctx6.fillRect(408+60, 1, 1, 10);
+
+	ctx6.fillRect(456+60, 1, 1, 10);
+	ctx6.fillRect(480+60, 1, 1, 10);
+	ctx6.fillRect(504+60, 1, 1, 10);
+	ctx6.fillRect(528+60, 1, 1, 10);
+	ctx6.fillRect(552+60, 1, 1, 10);
+
+//----------------------------------------------
+
+	ctx7.clearRect(20, 259, 640, 20);
+	ctx7.fillStyle = "#2A4059";
+	ctx7.fillRect(60, 1, 578, 257);
+	ctx7.font = "15px Arial";
+	ctx7.lineWidth = 1;
+        ctx7.fillStyle="white";
+	ctx7.fillText("1060", 20, 11);   
+	ctx7.fillText("1040", 20, 37);   
+	ctx7.fillText("1020", 20, 69);   
+	ctx7.fillText("1000", 20, 101);   
+	ctx7.fillText("980", 25, 133);   
+	ctx7.fillText("960", 25, 165);   
+	ctx7.fillText("940", 25, 197);   
+	ctx7.fillText("920", 25, 229);   
+  
+	ctx7.fillStyle = "black";
+	
+	ctx7.fillRect(144+60, 1, 1, 256);
+	ctx7.fillRect(288+60, 1, 1, 256);
+	ctx7.fillRect(432+60, 1, 1, 256);
+
+	ctx7.fillRect(24+60, 1, 1, 10);
+	ctx7.fillRect(48+60, 1, 1, 10);
+	ctx7.fillRect(72+60, 1, 1, 10);
+	ctx7.fillRect(96+60, 1, 1, 10);
+	ctx7.fillRect(120+60, 1, 1, 10);
+
+	ctx7.fillRect(168+60, 1, 1, 10);
+	ctx7.fillRect(192+60, 1, 1, 10);
+	ctx7.fillRect(216+60, 1, 1, 10);
+	ctx7.fillRect(240+60, 1, 1, 10);
+	ctx7.fillRect(264+60, 1, 1, 10);
+
+	ctx7.fillRect(312+60, 1, 1, 10);
+	ctx7.fillRect(336+60, 1, 1, 10);
+	ctx7.fillRect(360+60, 1, 1, 10);
+	ctx7.fillRect(384+60, 1, 1, 10);
+	ctx7.fillRect(408+60, 1, 1, 10);
+
+	ctx7.fillRect(456+60, 1, 1, 10);
+	ctx7.fillRect(480+60, 1, 1, 10);
+	ctx7.fillRect(504+60, 1, 1, 10);
+	ctx7.fillRect(528+60, 1, 1, 10);
+	ctx7.fillRect(552+60, 1, 1, 10);
+
+//----------------------------------------------
+
+	ctx8.clearRect(20, 259, 640, 20);
+	ctx8.fillStyle = "#2A4059";
+	ctx8.fillRect(60, 1, 578, 257);
+	ctx8.font = "15px Arial";
+	ctx8.lineWidth = 1;
+        ctx8.fillStyle="white";
+	ctx8.fillText("20", 35, 11);   
+	ctx8.fillText("15", 35, 37);   
+	ctx8.fillText("10", 35, 69);   
+	ctx8.fillText("5", 40, 101);   
+	ctx8.fillText("0", 40, 133);   
+	ctx8.fillText("-5", 35, 165);   
+	ctx8.fillText("-10", 30, 197);   
+	ctx8.fillText("-15", 30, 229);   
+  
+	ctx8.fillStyle = "black";
+	
+	ctx8.fillRect(144+60, 1, 1, 256);
+	ctx8.fillRect(288+60, 1, 1, 256);
+	ctx8.fillRect(432+60, 1, 1, 256);
+
+	ctx8.fillRect(24+60, 1, 1, 10);
+	ctx8.fillRect(48+60, 1, 1, 10);
+	ctx8.fillRect(72+60, 1, 1, 10);
+	ctx8.fillRect(96+60, 1, 1, 10);
+	ctx8.fillRect(120+60, 1, 1, 10);
+
+	ctx8.fillRect(168+60, 1, 1, 10);
+	ctx8.fillRect(192+60, 1, 1, 10);
+	ctx8.fillRect(216+60, 1, 1, 10);
+	ctx8.fillRect(240+60, 1, 1, 10);
+	ctx8.fillRect(264+60, 1, 1, 10);
+
+	ctx8.fillRect(312+60, 1, 1, 10);
+	ctx8.fillRect(336+60, 1, 1, 10);
+	ctx8.fillRect(360+60, 1, 1, 10);
+	ctx8.fillRect(384+60, 1, 1, 10);
+	ctx8.fillRect(408+60, 1, 1, 10);
+
+	ctx8.fillRect(456+60, 1, 1, 10);
+	ctx8.fillRect(480+60, 1, 1, 10);
+	ctx8.fillRect(504+60, 1, 1, 10);
+	ctx8.fillRect(528+60, 1, 1, 10);
+	ctx8.fillRect(552+60, 1, 1, 10);
+
+//-----------------------------------------------
+
+	ctx9.strokeStyle = "#cacaca";
+	ctx9.beginPath();
+	ctx9.arc(340, 340, 299, 0, 2 * Math.PI);
+	ctx9.stroke();
+
+	ctx9.beginPath();
+	ctx9.arc(340, 340, 149, 0, 2 * Math.PI);
+	ctx9.stroke();
+
+	ctx9.font = "20px Arial";
+	ctx9.lineWidth = 1;
+	ctx9.fillText("N", 330, 30);   
+	ctx9.fillText("S", 330, 670);   
+	ctx9.fillText("E", 650, 350);   
+	ctx9.fillText("W", 10, 350);   
+
+
+}
+
 
 
 
