@@ -8,7 +8,7 @@ self.addEventListener('install', event => {
       '',
       'favicon.ico',
       'manifest.json',
-      'smyth_512.png',
+     // 'smyth_512.png',
      'index.html',
       'style.css'
      
