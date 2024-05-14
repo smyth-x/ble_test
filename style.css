@@ -170,3 +170,7 @@ color:black;
   background-color: green;
 }
 
+
+#map { height: 360px; 
+width: 680px;
+margin:auto;}
