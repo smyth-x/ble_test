@@ -1,4 +1,4 @@
-const CACHE_NAME = `JMX24-v05`;
+const CACHE_NAME = `JMX24-v06`;
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
