@@ -8,10 +8,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.5"> 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" type="text/css" href="style.css">
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
     <meta charset="UTF-8">
 </head>
 
 <body>
+
+
+
+
+
 
 
     <div class="topnav"><h1>JMX24 Remote Viewer</h1></div>
@@ -30,7 +45,7 @@
  
 
 
-<h2 id="myHeader">Microphone Sound Pressure Level (dB)</h2>
+<h2 id="myHeader">Microphone SPL (dB)</h2>
 <canvas id="myCan1" width="670" height="300" style="border:1px #172330"></canvas>
 
 <h2 id="myHeader">Ambient Light Level (Lux)</h2>
@@ -39,7 +54,7 @@
 <h2 id="myHeader">Air Temperature (°C)</h2>
 <canvas id="myCan3" width="670" height="300" style="border:1px #172330;"></canvas>
 
-<h2 id="myHeader">Relative Air Humidity (%)</h2>
+<h2 id="myHeader">Air Relative Humidity (%)</h2>
 <canvas id="myCan4" width="670" height="300" style="border:1px #172330"></canvas>
 
 <h2 id="myHeader">Acceleration (g)</h2>
@@ -51,11 +66,30 @@
 <h2 id="myHeader">Air Pressure (hPa)</h2>
 <canvas id="myCan7" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">Clock drift (µsec)</h2>
+<h2 id="myHeader">Clock Drift (µsec)</h2>
 <canvas id="myCan8" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">Active GPS Satellites</h2>
+<h2 id="myHeader">GPS Satellite Constellation</h2>
 <canvas id="myCan9" width="680" height="680" style="border:1px solid grey"></canvas>
+
+<h2 id="myHeader">Fixed Satellite Signal Quality (CNR) </h2>
+<canvas id="myCan10" width="670" height="300" style="border:1px #172330"></canvas>
+
+<h2 id="myHeader"> </h2>
+<p><span id="gps_pos" style="color:white; font-size: 25px; "><b> </b></span></p>
+<p><span id="gps_time" style="color:white; font-size: 25px; "><b> </b></span></p>
+<h2 id="myHeader"> </h2>
+
+
+
+
+
+
+
+
+
+<div id="map"></div>
+
 
 
 
@@ -63,7 +97,7 @@
 
 
 <div class="footer">
-<p><a href="https://smyth-research.com/">Created by Smyth-Research.com</a></p>
+<p><a href="https://smyth-research.com/" style="color:white;">Created by Smyth-Research.com</a></p>
 </div>
 
 
@@ -85,11 +119,15 @@ if('serviceWorker' in navigator) {
     const bleStateContainer = document.getElementById('bleState');
     const bleDataContainer = document.getElementById('bleBytes');
     const timestampContainer = document.getElementById('timestamp');
-    const blenameContainer = document.getElementById('deviceName');
- 
+    const blenameContainer = document.getElementById('deviceName'); 
+    const GPS_Position = document.getElementById('gps_pos');
+    const GPS_Time = document.getElementById('gps_time');
+
+
+
     var elem = document.getElementById("myBar");
     var temp = new DataView(new ArrayBuffer(18),0);
-    var mic_var = new DataView(new ArrayBuffer((144*8)+448),0);
+    var mic_var = new DataView(new ArrayBuffer((144*8)+448+64),0);
     var i,j,k,l,m,n,offset=0,draw_cnt;
     var hour, hourz1, hourz2, hourz3, hourz4;
     var x_axis=0, old=0;
@@ -100,6 +138,7 @@ if('serviceWorker' in navigator) {
 	var active_id;
 	var sat_y;
 	var sat_x;
+	var sat_level;
 
 
     var c1 = document.getElementById("myCan1");
@@ -118,9 +157,20 @@ if('serviceWorker' in navigator) {
     var ctx7 = c7.getContext("2d");
     var c8 = document.getElementById("myCan8");
     var ctx8 = c8.getContext("2d");
-
     var c9 = document.getElementById("myCan9");
     var ctx9 = c9.getContext("2d");
+    var c10 = document.getElementById("myCan10");
+    var ctx10 = c10.getContext("2d");
+
+
+
+
+
+
+
+
+
+
 
 
     initialise_plots();
@@ -478,8 +528,11 @@ if('serviceWorker' in navigator) {
 
 
 
-	if(offset==1600) 
+	if(offset==1664) 
 	{
+		
+//--------------------------------- visible ------------------------------------
+
 		for(var i=0;i<100;i=i+5) //draw visible GPS satellites
 		{
 
@@ -547,6 +600,8 @@ if('serviceWorker' in navigator) {
 			ctx9.stroke();
 		}
 	
+
+//------------------------------------------ active ------------------------------------	
 
 		for(var i=0;i<12;i++) //fill active GPS satellites
 		{
@@ -630,7 +685,161 @@ if('serviceWorker' in navigator) {
 				ctx9.fillStyle="#00a6ff"; //blue
 				ctx9.fill();
 			}	
-		}	
+		}
+
+//----------------------------- Signal levels ----------------------------------
+
+	
+
+		for(var i=0;i<12;i++) //draw fixed GPS satellite signal level
+		{
+			ctx10.fillStyle ="#00d81a"; //green
+			active_id=mic_var[i+1552];
+			if(active_id)
+			{
+				for(var j=0;j<100;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_level=mic_var[j+1156];
+				   	if(sat_id==active_id) break;
+				}
+
+				var height=sat_level*5.12;
+				ctx10.fillRect(60+(i*12), 257-height, 11, height);
+			}	
+		}
+
+
+
+		for(var i=0;i<12;i++) //draw fixed BEI satellite signal level
+		{
+			ctx10.fillStyle = "#ffec02"; //yellow
+			active_id=mic_var[i+1552+12];
+			if(active_id)
+			{
+				for(var j=100;j<200;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_level=mic_var[j+1156];
+				   	if(sat_id==active_id) break;
+				}
+
+				var height=sat_level*5.12;
+				ctx10.fillRect(145+60+(i*12), 257-height, 11, height);
+			}	
+		}
+
+
+
+		for(var i=0;i<12;i++) //draw fixed GLO satellite signal level
+		{
+			ctx10.fillStyle = "red";
+			active_id=mic_var[i+1552+24];
+			if(active_id)
+			{
+				for(var j=200;j<300;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_level=mic_var[j+1156];
+				   	if(sat_id==active_id) break;
+				}
+
+				var height=sat_level*5.12;
+				ctx10.fillRect(289+60+(i*12), 257-height, 11, height);
+			}	
+		}
+
+
+		for(var i=0;i<12;i++) //draw fixed GAL satellite signal level
+		{
+			ctx10.fillStyle = "#00a6ff"; //blue
+			active_id=mic_var[i+1552+36];
+			if(active_id)
+			{
+				for(var j=300;j<400;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_level=mic_var[j+1156];
+				   	if(sat_id==active_id) break;
+				}
+
+				var height=sat_level*5.12;
+				ctx10.fillRect(433+60+(i*12), 257-height, 11, height);
+			}	
+		}
+
+
+//------------------------------ Position/Date/Time ---------------------------------
+
+
+
+	var latitude=mic_var[1601];
+	var sign=0;
+	if(latitude>127)
+	{
+		sign=1;
+		latitude+=-128;
+	}
+
+	latitude+=mic_var[1602]/100;
+	latitude+=mic_var[1603]/10000;
+	latitude+=mic_var[1604]/1000000;
+	if(sign) latitude=-latitude;
+	let l=latitude.toFixed(6);
+
+	var longitude=mic_var[1605];
+	sign=0;
+	if(longitude>127)
+	{
+		sign=1;
+		longitude+=-128;
+	}
+
+	longitude=longitude*100;
+	longitude+=mic_var[1606];
+	longitude+=mic_var[1607]/100;
+	longitude+=mic_var[1608]/10000;
+	longitude+=mic_var[1609]/1000000;
+	if(sign) longitude=-longitude;
+	let g=longitude.toFixed(6);
+
+	GPS_Position.innerHTML="<b>Global Position: " + l + ", " + g;
+
+	var month;
+	if(mic_var[1614]==1) month="Jan";
+	if(mic_var[1614]==2) month="Feb";
+	if(mic_var[1614]==3) month="Mar";
+	if(mic_var[1614]==4) month="Apr";
+	if(mic_var[1614]==5) month="May";
+	if(mic_var[1614]==6) month="Jun";
+	if(mic_var[1614]==7) month="Jul";
+	if(mic_var[1614]==8) month="Aug";
+	if(mic_var[1614]==9) month="Sep";
+	if(mic_var[1614]==10) month="Oct";
+	if(mic_var[1614]==11) month="Nov";
+	if(mic_var[1614]==12) month="Dec";
+
+	var year=mic_var[1615]+2000;
+
+	GPS_Time.innerHTML="<b>UCT <b/>" + mic_var[1610] + ":" + mic_var[1611] +  ":" + mic_var[1612] + "  "  + mic_var[1613] + "-" + month + "-" + year;
+
+
+
+
+
+//----------------------- Leaflet ----------------------------------
+
+	var map = L.map('map').setView([latitude, longitude], 13);
+
+	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    	maxZoom: 19,
+//    	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+	var marker = L.marker([latitude, longitude]).addTo(map);
+
+
+
 
 
 
@@ -638,8 +847,9 @@ if('serviceWorker' in navigator) {
 
 
    	
-	//elem.style.width = ((offset*350)/1150) + "px";
-	elem.style.width = ((offset*350)/1600) + "px";
+	
+	elem.style.width = ((offset*350)/1664) + "px";
+
 	//if(offset>1088) offset=0;
 
 
@@ -1210,7 +1420,7 @@ var x,y,amp,angle;
 	ctx8.fillRect(528+60, 1, 1, 10);
 	ctx8.fillRect(552+60, 1, 1, 10);
 
-//-----------------------------------------------
+//----------- Initialise Satellite Constellation Graph -----------------
 
 	ctx9.strokeStyle = "white";
 	ctx9.beginPath();
@@ -1257,6 +1467,54 @@ var x,y,amp,angle;
 	ctx9.fill();
 	ctx9.fillStyle="white";
 	ctx9.fillText("= EU", 37, 102);  
+
+
+	ctx9.beginPath();
+	ctx9.arc(590, 20, 7, 0, 2 * Math.PI);
+	ctx9.strokeStyle = "#00d81a"; //green
+	ctx9.stroke();
+	ctx9.fillStyle="white";
+	ctx9.fillText("Visible", 610, 27);  
+
+	ctx9.beginPath();
+	ctx9.arc(590, 45, 10, 0, 2 * Math.PI);
+	ctx9.fillStyle="#00d81a"; //green
+	ctx9.fill();
+	ctx9.fillStyle="white";
+	ctx9.fillText("Fixed", 610, 52);  
+
+
+//------- Initialise Satellite Signal Level Graph -----------------
+
+	ctx10.clearRect(20, 259, 640, 20);
+	ctx10.fillStyle = "#2A4059";
+	ctx10.fillRect(60, 1, 578, 257);
+	ctx10.font = "15px Arial";
+	ctx10.lineWidth = 1;
+        ctx10.fillStyle="white";
+	ctx10.fillText("50", 35, 11);   
+	ctx10.fillText("45", 35, 31);   
+	ctx10.fillText("40", 35, 57);   
+	ctx10.fillText("35", 35, 83);   
+	ctx10.fillText("30", 35, 109);   
+	ctx10.fillText("25", 35, 135);   
+	ctx10.fillText("20", 35, 161);   
+	ctx10.fillText("15", 35, 187); 
+	ctx10.fillText("10", 35, 213); 
+	ctx10.fillText("5", 42, 239); 
+	ctx10.fillText("0", 42, 265); 
+
+	ctx10.fillText("USA", 115, 280); 
+	ctx10.fillText("China", 255, 280); 
+	ctx10.fillText("Russia", 400, 280); 
+	ctx10.fillText("EU", 560, 280); 
+
+	ctx10.fillStyle = "black";	
+	ctx10.fillRect(144+60, 1, 1, 256);
+	ctx10.fillRect(288+60, 1, 1, 256);
+	ctx10.fillRect(432+60, 1, 1, 256);
+
+
 
 }
 
