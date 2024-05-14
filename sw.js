@@ -1,4 +1,4 @@
-const CACHE_NAME = `JMX24-v07`;
+const CACHE_NAME = `JMX24-v08`;
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', event => {
@@ -12,8 +12,8 @@ self.addEventListener('install', event => {
      'index.html',
       'style.css',
       'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-      'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-      'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+      'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+     
     ]);
   })());
 });
