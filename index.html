@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <style> body {background-color: #172330;} </style>
     <title>JMX24 Viewer</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -90,10 +89,18 @@ if('serviceWorker' in navigator) {
  
     var elem = document.getElementById("myBar");
     var temp = new DataView(new ArrayBuffer(18),0);
-    var mic_var = new DataView(new ArrayBuffer(144*8),0);
+    var mic_var = new DataView(new ArrayBuffer((144*8)+448),0);
     var i,j,k,l,m,n,offset=0,draw_cnt;
     var hour, hourz1, hourz2, hourz3, hourz4;
     var x_axis=0, old=0;
+	var sat_id;
+	var sat_elev;
+	var sat_azi;
+	var sat_snr;
+	var active_id;
+	var sat_y;
+	var sat_x;
+
 
     var c1 = document.getElementById("myCan1");
     var ctx1 = c1.getContext("2d");
@@ -470,15 +477,224 @@ if('serviceWorker' in navigator) {
 	}
 
 
+
+	if(offset==1600) 
+	{
+		for(var i=0;i<100;i=i+5) //draw visible GPS satellites
+		{
+
+			sat_id=mic_var[i+1152];
+			sat_elev=mic_var[i+1153];
+			sat_azi=mic_var[i+1154]+(mic_var[i+1155]*256);
+			sat_snr=mic_var[i+1156];
+
+			calculate_sat_coords(sat_id, sat_elev, sat_azi);
+
+			ctx9.beginPath();
+			ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 7, 0, 2 * Math.PI);
+			ctx9.strokeStyle = "#00d81a"; //green
+			ctx9.stroke();
+		}	
+
+
+		for(var i=100;i<200;i=i+5) //draw visible BEI satellites
+		{
+
+			sat_id=mic_var[i+1152];
+			sat_elev=mic_var[i+1153];
+			sat_azi=mic_var[i+1154]+(mic_var[i+1155]*256);
+			sat_snr=mic_var[i+1156];
+
+			calculate_sat_coords(sat_id, sat_elev, sat_azi);
+
+			ctx9.beginPath();
+			ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 7, 0, 2 * Math.PI);
+			ctx9.strokeStyle = "#ffec02"; //yellow
+			ctx9.stroke();
+		}
+
+
+		for(var i=200;i<300;i=i+5) //draw visible GLO satellites
+		{
+
+			sat_id=mic_var[i+1152];
+			sat_elev=mic_var[i+1153];
+			sat_azi=mic_var[i+1154]+(mic_var[i+1155]*256);
+			sat_snr=mic_var[i+1156];
+
+			calculate_sat_coords(sat_id, sat_elev, sat_azi);
+
+			ctx9.beginPath();
+			ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 7, 0, 2 * Math.PI);
+			ctx9.strokeStyle = "red";
+			ctx9.stroke();
+		}
+
+
+		for(var i=300;i<400;i=i+5) //draw visible GAL satellites
+		{
+
+			sat_id=mic_var[i+1152];
+			sat_elev=mic_var[i+1153];
+			sat_azi=mic_var[i+1154]+(mic_var[i+1155]*256);
+			sat_snr=mic_var[i+1156];
+
+			calculate_sat_coords(sat_id, sat_elev, sat_azi);
+
+			ctx9.beginPath();
+			ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 7, 0, 2 * Math.PI);
+			ctx9.strokeStyle = "#00a6ff"; //blue
+			ctx9.stroke();
+		}
+	
+
+		for(var i=0;i<12;i++) //fill active GPS satellites
+		{
+			active_id=mic_var[i+1552];
+			if(active_id)
+			{
+				for(var j=0;j<100;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_elev=mic_var[j+1153];
+					sat_azi=mic_var[j+1154]+(mic_var[j+1155]*256);
+				   	if(sat_id==active_id) break;
+				}
+
+				calculate_sat_coords(sat_id, sat_elev, sat_azi);
+				ctx9.beginPath();
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.fillStyle="#00d81a"; //green
+				ctx9.fill();
+			}	
+		}
+
+		for(var i=0;i<12;i++) //fill active BEI satellites
+		{
+			active_id=mic_var[i+1552+12];
+			if(active_id)
+			{
+				for(var j=100;j<200;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_elev=mic_var[j+1153];
+					sat_azi=mic_var[j+1154]+(mic_var[j+1155]*256);
+				   	if(sat_id==active_id) break;
+				}
+
+				calculate_sat_coords(sat_id, sat_elev, sat_azi);
+				ctx9.beginPath();
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.fillStyle="#ffec02"; //yellow
+				ctx9.fill();
+			}	
+		}
+
+		for(var i=0;i<12;i++) //fill active GLO satellites
+		{
+			active_id=mic_var[i+1552+24];
+			if(active_id)
+			{
+				for(var j=200;j<300;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_elev=mic_var[j+1153];
+					sat_azi=mic_var[j+1154]+(mic_var[j+1155]*256);
+				   	if(sat_id==active_id) break;
+				}
+
+				calculate_sat_coords(sat_id, sat_elev, sat_azi);
+				ctx9.beginPath();
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.fillStyle="red";
+				ctx9.fill();
+			}	
+		}	
+
+		for(var i=0;i<12;i++) //fill active GAL satellites
+		{
+			active_id=mic_var[i+1552+36];
+			if(active_id)
+			{
+				for(var j=300;j<400;j=j+5)
+				{
+					sat_id=mic_var[j+1152];
+					sat_elev=mic_var[j+1153];
+					sat_azi=mic_var[j+1154]+(mic_var[j+1155]*256);
+				   	if(sat_id==active_id) break;
+				}
+
+				calculate_sat_coords(sat_id, sat_elev, sat_azi);
+				ctx9.beginPath();
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.fillStyle="#00a6ff"; //blue
+				ctx9.fill();
+			}	
+		}	
+
+
+
+	}
+
+
    	
-	elem.style.width = ((offset*350)/1150) + "px";
-	if(offset>1088) offset=0;
+	//elem.style.width = ((offset*350)/1150) + "px";
+	elem.style.width = ((offset*350)/1600) + "px";
+	//if(offset>1088) offset=0;
+
+
+
+
 
  //       timestampContainer.innerHTML = getDateTime();
     }
 
 
- 
+//----------------------------------------------------------------------------------
+
+function calculate_sat_coords(sat_id, sat_elev, sat_azi)
+{
+var x,y,amp,angle;
+			if(sat_id)
+			{
+				if(sat_azi<=90.0)
+				{
+					amp=(90-sat_elev)/90;
+					angle=((90-sat_azi)/360)*6.2831853;
+					y=Math.sin(angle);
+					x=Math.cos(angle);
+					sat_y=y*(-amp);
+					sat_x=x*amp;
+				}
+				else if(sat_azi<=180.0)
+				{
+					amp=(90-sat_elev)/90;
+					angle=((180-sat_azi)/360)*6.2831853;
+					y=Math.sin(angle);
+					x=Math.cos(angle);
+					sat_y=y*amp;
+					sat_x=x*amp;
+				}
+				else if(sat_azi<=270.0)
+				{
+					amp=(90-sat_elev)/90;
+					angle=((270-sat_azi)/360)*6.2831853;
+					y=Math.sin(angle);
+					x=Math.cos(angle);
+					sat_y=y*amp;
+					sat_x=x*(-amp);
+				}
+				else 
+				{
+					amp=(90-sat_elev)/90;
+					angle=((360-sat_azi)/360)*6.2831853;
+					y=Math.sin(angle);
+					x=Math.cos(angle);
+					sat_y=y*(-amp);
+					sat_x=x*(-amp);
+				}		
+			}
+} 
 
 
 //------------------------------------------------------------
@@ -996,7 +1212,7 @@ if('serviceWorker' in navigator) {
 
 //-----------------------------------------------
 
-	ctx9.strokeStyle = "#cacaca";
+	ctx9.strokeStyle = "white";
 	ctx9.beginPath();
 	ctx9.arc(340, 340, 299, 0, 2 * Math.PI);
 	ctx9.stroke();
@@ -1007,11 +1223,40 @@ if('serviceWorker' in navigator) {
 
 	ctx9.font = "20px Arial";
 	ctx9.lineWidth = 1;
+	ctx9.fillStyle="white";
 	ctx9.fillText("N", 330, 30);   
 	ctx9.fillText("S", 330, 670);   
 	ctx9.fillText("E", 650, 350);   
 	ctx9.fillText("W", 10, 350);   
 
+
+	ctx9.beginPath();
+	ctx9.arc(20, 20, 10, 0, 2 * Math.PI);
+	ctx9.fillStyle="#00d81a"; //green
+	ctx9.fill();
+	ctx9.fillStyle="white";
+	ctx9.fillText("= USA", 37, 27);  
+
+	ctx9.beginPath();
+	ctx9.arc(20, 45, 10, 0, 2 * Math.PI);
+	ctx9.fillStyle="#ffec02"; //yellow
+	ctx9.fill();
+	ctx9.fillStyle="white";
+	ctx9.fillText("= China", 37, 52);  
+
+	ctx9.beginPath();
+	ctx9.arc(20, 70, 10, 0, 2 * Math.PI);
+	ctx9.fillStyle="red"; //red
+	ctx9.fill();
+	ctx9.fillStyle="white";
+	ctx9.fillText("= Russia", 37, 77);  
+
+	ctx9.beginPath();
+	ctx9.arc(20, 95, 10, 0, 2 * Math.PI);
+	ctx9.fillStyle="#00a6ff"; //blue
+	ctx9.fill();
+	ctx9.fillStyle="white";
+	ctx9.fillText("= EU", 37, 102);  
 
 }
 
