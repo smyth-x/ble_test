@@ -3,7 +3,7 @@
 
 <head>
     <style> body {background-color: #172330;} </style>
-    <title>JMX24 Viewer</title>
+    <title>JMX24 View</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=0.5"> 
     <link rel="manifest" href="manifest.json">
@@ -66,13 +66,13 @@
 <h2 id="myHeader">Air Pressure (hPa)</h2>
 <canvas id="myCan7" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">Clock Drift (µsec)</h2>
+<h2 id="myHeader">Accumulated Audio Drift (&micros)</h2>
 <canvas id="myCan8" width="670" height="300" style="border:1px #172330"></canvas>
 
-<h2 id="myHeader">GPS Satellite Constellation</h2>
+<h2 id="myHeader">GNSS Satellite Constellation</h2>
 <canvas id="myCan9" width="680" height="680" style="border:1px solid grey"></canvas>
 
-<h2 id="myHeader">Fixed Satellite Signal Quality (CNR) </h2>
+<h2 id="myHeader">Satellite Signal Quality (CNR) </h2>
 <canvas id="myCan10" width="670" height="300" style="border:1px #172330"></canvas>
 
 <h2 id="myHeader"> </h2>
@@ -408,6 +408,43 @@ if('serviceWorker' in navigator) {
 		draw_cnt=1;
 	}
 
+	ctx1.fillStyle = "black";
+	
+	ctx1.fillRect(144+60, 1, 1, 256);
+	ctx1.fillRect(288+60, 1, 1, 256);
+	ctx1.fillRect(432+60, 1, 1, 256);
+
+	ctx1.fillRect(24+60, 248, 1, 10);
+	ctx1.fillRect(48+60, 248, 1, 10);
+	ctx1.fillRect(72+60, 248, 1, 10);
+	ctx1.fillRect(96+60, 248, 1, 10);
+	ctx1.fillRect(120+60, 248, 1, 10);
+
+	ctx1.fillRect(168+60, 248, 1, 10);
+	ctx1.fillRect(192+60, 248, 1, 10);
+	ctx1.fillRect(216+60, 248, 1, 10);
+	ctx1.fillRect(240+60, 248, 1, 10);
+	ctx1.fillRect(264+60, 248, 1, 10);
+
+	ctx1.fillRect(312+60, 248, 1, 10);
+	ctx1.fillRect(336+60, 248, 1, 10);
+	ctx1.fillRect(360+60, 248, 1, 10);
+	ctx1.fillRect(384+60, 248, 1, 10);
+	ctx1.fillRect(408+60, 248, 1, 10);
+
+	ctx1.fillRect(456+60, 248, 1, 10);
+	ctx1.fillRect(480+60, 248, 1, 10);
+	ctx1.fillRect(504+60, 248, 1, 10);
+	ctx1.fillRect(528+60, 248, 1, 10);
+	ctx1.fillRect(552+60, 248, 1, 10);
+
+	ctx1.fillRect(60, 55, 580, 1);
+	ctx1.fillRect(60, 55+50, 580, 1);
+	ctx1.fillRect(60, 55+100, 580, 1);
+	ctx1.fillRect(60, 55+150, 580, 1);
+
+
+
 
 	if((offset>=288)&&(draw_cnt==1)); //draw LUX
 	{
@@ -423,6 +460,47 @@ if('serviceWorker' in navigator) {
 		}
 		draw_cnt=2;
 	}
+
+
+	ctx2.fillStyle = "black";
+	
+	ctx2.fillRect(144+60, 1, 1, 256);
+	ctx2.fillRect(288+60, 1, 1, 256);
+	ctx2.fillRect(432+60, 1, 1, 256);
+
+	ctx2.fillRect(24+60, 248, 1, 10);
+	ctx2.fillRect(48+60, 248, 1, 10);
+	ctx2.fillRect(72+60, 248, 1, 10);
+	ctx2.fillRect(96+60, 248, 1, 10);
+	ctx2.fillRect(120+60, 248, 1, 10);
+
+	ctx2.fillRect(168+60, 248, 1, 10);
+	ctx2.fillRect(192+60, 248, 1, 10);
+	ctx2.fillRect(216+60, 248, 1, 10);
+	ctx2.fillRect(240+60, 248, 1, 10);
+	ctx2.fillRect(264+60, 248, 1, 10);
+
+	ctx2.fillRect(312+60, 248, 1, 10);
+	ctx2.fillRect(336+60, 248, 1, 10);
+	ctx2.fillRect(360+60, 248, 1, 10);
+	ctx2.fillRect(384+60, 248, 1, 10);
+	ctx2.fillRect(408+60, 248, 1, 10);
+
+	ctx2.fillRect(456+60, 248, 1, 10);
+	ctx2.fillRect(480+60, 248, 1, 10);
+	ctx2.fillRect(504+60, 248, 1, 10);
+	ctx2.fillRect(528+60, 248, 1, 10);
+	ctx2.fillRect(552+60, 248, 1, 10);
+
+	ctx2.fillRect(60, 32, 580, 1);
+	ctx2.fillRect(60, 64, 580, 1);
+	ctx2.fillRect(60, 96, 580, 1);
+	ctx2.fillRect(60, 128, 580, 1);
+	ctx2.fillRect(60, 160, 580, 1);
+	ctx2.fillRect(60, 192, 580, 1);
+	ctx2.fillRect(60, 224, 580, 1);
+
+
 
 
 	if((offset>=432)&&(draw_cnt==2)) //draw Temp
@@ -441,6 +519,47 @@ if('serviceWorker' in navigator) {
 	}
 
 
+	ctx3.fillStyle = "black";
+	
+	ctx3.fillRect(144+60, 1, 1, 256);
+	ctx3.fillRect(288+60, 1, 1, 256);
+	ctx3.fillRect(432+60, 1, 1, 256);
+
+	ctx3.fillRect(24+60, 248, 1, 10);
+	ctx3.fillRect(48+60, 248, 1, 10);
+	ctx3.fillRect(72+60, 248, 1, 10);
+	ctx3.fillRect(96+60, 248, 1, 10);
+	ctx3.fillRect(120+60, 248, 1, 10);
+
+	ctx3.fillRect(168+60, 248, 1, 10);
+	ctx3.fillRect(192+60, 248, 1, 10);
+	ctx3.fillRect(216+60, 248, 1, 10);
+	ctx3.fillRect(240+60, 248, 1, 10);
+	ctx3.fillRect(264+60, 248, 1, 10);
+
+	ctx3.fillRect(312+60, 248, 1, 10);
+	ctx3.fillRect(336+60, 248, 1, 10);
+	ctx3.fillRect(360+60, 248, 1, 10);
+	ctx3.fillRect(384+60, 248, 1, 10);
+	ctx3.fillRect(408+60, 248, 1, 10);
+
+	ctx3.fillRect(456+60, 248, 1, 10);
+	ctx3.fillRect(480+60, 248, 1, 10);
+	ctx3.fillRect(504+60, 248, 1, 10);
+	ctx3.fillRect(528+60, 248, 1, 10);
+	ctx3.fillRect(552+60, 248, 1, 10);
+
+
+	ctx3.fillRect(60, 36, 580, 1);
+	ctx3.fillRect(60, 73, 580, 1);
+	ctx3.fillRect(60, 109, 580, 1);
+	ctx3.fillRect(60, 146, 580, 1);
+	ctx3.fillRect(60, 182, 580, 1);
+	ctx3.fillRect(60, 219, 580, 1);
+	
+
+
+
 	if((offset>=576)&&(draw_cnt==3)) //Draw RH
 	{
 		j=61;
@@ -457,15 +576,54 @@ if('serviceWorker' in navigator) {
 	}
 
 
+	ctx4.fillStyle = "black";
+	
+	ctx4.fillRect(144+60, 1, 1, 256);
+	ctx4.fillRect(288+60, 1, 1, 256);
+	ctx4.fillRect(432+60, 1, 1, 256);
+
+	ctx4.fillRect(24+60, 248, 1, 10);
+	ctx4.fillRect(48+60, 248, 1, 10);
+	ctx4.fillRect(72+60, 248, 1, 10);
+	ctx4.fillRect(96+60, 248, 1, 10);
+	ctx4.fillRect(120+60, 248, 1, 10);
+
+	ctx4.fillRect(168+60, 248, 1, 10);
+	ctx4.fillRect(192+60, 248, 1, 10);
+	ctx4.fillRect(216+60, 248, 1, 10);
+	ctx4.fillRect(240+60, 248, 1, 10);
+	ctx4.fillRect(264+60, 248, 1, 10);
+
+	ctx4.fillRect(312+60, 248, 1, 10);
+	ctx4.fillRect(336+60, 248, 1, 10);
+	ctx4.fillRect(360+60, 248, 1, 10);
+	ctx4.fillRect(384+60, 248, 1, 10);
+	ctx4.fillRect(408+60, 248, 1, 10);
+
+	ctx4.fillRect(456+60, 248, 1, 10);
+	ctx4.fillRect(480+60, 248, 1, 10);
+	ctx4.fillRect(504+60, 248, 1, 10);
+	ctx4.fillRect(528+60, 248, 1, 10);
+	ctx4.fillRect(552+60, 248, 1, 10);
+
+
+	ctx4.fillRect(60, 32, 580, 1);
+	ctx4.fillRect(60, 64, 580, 1);
+	ctx4.fillRect(60, 96, 580, 1);
+	ctx4.fillRect(60, 128, 580, 1);
+	ctx4.fillRect(60, 160, 580, 1);
+	ctx4.fillRect(60, 192, 580, 1);
+	ctx4.fillRect(60, 224, 580, 1);
+
+
 	if((offset>=720)&&(draw_cnt==4)) //Draw ACCEL
 	{
 		j=61;
 		for(var i=0;i<144;i++)
 		{
 			k=mic_var[i+576];
-			if(k==128) k=127;
-			if(k==0) ctx5.rect(j, 127, 4, 0);			
-			else ctx5.rect(j, 127, 4, 128-k);
+			if(k==0xff) k=0;
+			ctx5.rect(j, 257, 4, -k);
 			ctx5.fillStyle="white";
 			ctx5.fill();
 			j=j+4;
@@ -474,6 +632,44 @@ if('serviceWorker' in navigator) {
 	}
 
 
+	ctx5.fillStyle = "black";
+	
+	ctx5.fillRect(144+60, 1, 1, 256);
+	ctx5.fillRect(288+60, 1, 1, 256);
+	ctx5.fillRect(432+60, 1, 1, 256);
+
+	ctx5.fillRect(24+60, 248, 1, 10);
+	ctx5.fillRect(48+60, 248, 1, 10);
+	ctx5.fillRect(72+60, 248, 1, 10);
+	ctx5.fillRect(96+60, 248, 1, 10);
+	ctx5.fillRect(120+60, 248, 1, 10);
+
+	ctx5.fillRect(168+60, 248, 1, 10);
+	ctx5.fillRect(192+60, 248, 1, 10);
+	ctx5.fillRect(216+60, 248, 1, 10);
+	ctx5.fillRect(240+60, 248, 1, 10);
+	ctx5.fillRect(264+60, 248, 1, 10);
+
+	ctx5.fillRect(312+60, 248, 1, 10);
+	ctx5.fillRect(336+60, 248, 1, 10);
+	ctx5.fillRect(360+60, 248, 1, 10);
+	ctx5.fillRect(384+60, 248, 1, 10);
+	ctx5.fillRect(408+60, 248, 1, 10);
+
+	ctx5.fillRect(456+60, 248, 1, 10);
+	ctx5.fillRect(480+60, 248, 1, 10);
+	ctx5.fillRect(504+60, 248, 1, 10);
+	ctx5.fillRect(528+60, 248, 1, 10);
+	ctx5.fillRect(552+60, 248, 1, 10);
+
+
+	ctx5.fillRect(60, 32, 580, 1);
+	ctx5.fillRect(60, 64, 580, 1);
+	ctx5.fillRect(60, 96, 580, 1);
+	ctx5.fillRect(60, 128, 580, 1);
+	ctx5.fillRect(60, 160, 580, 1);
+	ctx5.fillRect(60, 192, 580, 1);
+	ctx5.fillRect(60, 224, 580, 1);
 
 
 	if((offset>=864)&&(draw_cnt==5)) //draw CCT
@@ -490,6 +686,46 @@ if('serviceWorker' in navigator) {
 		}
 		draw_cnt=6;
 	}
+
+
+	ctx6.fillStyle = "black";
+	
+	ctx6.fillRect(144+60, 1, 1, 256);
+	ctx6.fillRect(288+60, 1, 1, 256);
+	ctx6.fillRect(432+60, 1, 1, 256);
+
+	ctx6.fillRect(24+60, 248, 1, 10);
+	ctx6.fillRect(48+60, 248, 1, 10);
+	ctx6.fillRect(72+60, 248, 1, 10);
+	ctx6.fillRect(96+60, 248, 1, 10);
+	ctx6.fillRect(120+60, 248, 1, 10);
+
+	ctx6.fillRect(168+60, 248, 1, 10);
+	ctx6.fillRect(192+60, 248, 1, 10);
+	ctx6.fillRect(216+60, 248, 1, 10);
+	ctx6.fillRect(240+60, 248, 1, 10);
+	ctx6.fillRect(264+60, 248, 1, 10);
+
+	ctx6.fillRect(312+60, 248, 1, 10);
+	ctx6.fillRect(336+60, 248, 1, 10);
+	ctx6.fillRect(360+60, 248, 1, 10);
+	ctx6.fillRect(384+60, 248, 1, 10);
+	ctx6.fillRect(408+60, 248, 1, 10);
+
+	ctx6.fillRect(456+60, 248, 1, 10);
+	ctx6.fillRect(480+60, 248, 1, 10);
+	ctx6.fillRect(504+60, 248, 1, 10);
+	ctx6.fillRect(528+60, 248, 1, 10);
+	ctx6.fillRect(552+60, 248, 1, 10);
+
+	ctx6.fillRect(60, 28, 580, 1);
+	ctx6.fillRect(60, 57, 580, 1);
+	ctx6.fillRect(60, 85, 580, 1);
+	ctx6.fillRect(60, 114, 580, 1);
+	ctx6.fillRect(60, 142, 580, 1);
+	ctx6.fillRect(60, 171, 580, 1);
+	ctx6.fillRect(60, 199, 580, 1);
+	ctx6.fillRect(60, 228, 580, 1);
 
 
 
@@ -509,6 +745,43 @@ if('serviceWorker' in navigator) {
 	}
 
 
+	ctx7.fillStyle = "black";
+	
+	ctx7.fillRect(144+60, 1, 1, 256);
+	ctx7.fillRect(288+60, 1, 1, 256);
+	ctx7.fillRect(432+60, 1, 1, 256);
+
+	ctx7.fillRect(24+60, 248, 1, 10);
+	ctx7.fillRect(48+60, 248, 1, 10);
+	ctx7.fillRect(72+60, 248, 1, 10);
+	ctx7.fillRect(96+60, 248, 1, 10);
+	ctx7.fillRect(120+60, 248, 1, 10);
+
+	ctx7.fillRect(168+60, 248, 1, 10);
+	ctx7.fillRect(192+60, 248, 1, 10);
+	ctx7.fillRect(216+60, 248, 1, 10);
+	ctx7.fillRect(240+60, 248, 1, 10);
+	ctx7.fillRect(264+60, 248, 1, 10);
+
+	ctx7.fillRect(312+60, 248, 1, 10);
+	ctx7.fillRect(336+60, 248, 1, 10);
+	ctx7.fillRect(360+60, 248, 1, 10);
+	ctx7.fillRect(384+60, 248, 1, 10);
+	ctx7.fillRect(408+60, 248, 1, 10);
+
+	ctx7.fillRect(456+60, 248, 1, 10);
+	ctx7.fillRect(480+60, 248, 1, 10);
+	ctx7.fillRect(504+60, 248, 1, 10);
+	ctx7.fillRect(528+60, 248, 1, 10);
+	ctx7.fillRect(552+60, 248, 1, 10);
+
+	ctx7.fillRect(60, 32, 580, 1);
+	ctx7.fillRect(60, 64, 580, 1);
+	ctx7.fillRect(60, 96, 580, 1);
+	ctx7.fillRect(60, 128, 580, 1);
+	ctx7.fillRect(60, 160, 580, 1);
+	ctx7.fillRect(60, 192, 580, 1);
+	ctx7.fillRect(60, 224, 580, 1);
 
 	if((offset>=1152)&&(draw_cnt==7)) //draw clk drift
 	{
@@ -525,6 +798,45 @@ if('serviceWorker' in navigator) {
 		}
 		draw_cnt=8;
 	}
+
+	ctx8.fillStyle = "black";
+	
+	ctx8.fillRect(144+60, 1, 1, 256);
+	ctx8.fillRect(288+60, 1, 1, 256);
+	ctx8.fillRect(432+60, 1, 1, 256);
+
+	ctx8.fillRect(24+60, 124, 1, 10);
+	ctx8.fillRect(48+60, 124, 1, 10);
+	ctx8.fillRect(72+60, 124, 1, 10);
+	ctx8.fillRect(96+60, 124, 1, 10);
+	ctx8.fillRect(120+60, 124, 1, 10);
+
+	ctx8.fillRect(168+60, 124, 1, 10);
+	ctx8.fillRect(192+60, 124, 1, 10);
+	ctx8.fillRect(216+60, 124, 1, 10);
+	ctx8.fillRect(240+60, 124, 1, 10);
+	ctx8.fillRect(264+60, 124, 1, 10);
+
+	ctx8.fillRect(312+60, 124, 1, 10);
+	ctx8.fillRect(336+60, 124, 1, 10);
+	ctx8.fillRect(360+60, 124, 1, 10);
+	ctx8.fillRect(384+60, 124, 1, 10);
+	ctx8.fillRect(408+60, 124, 1, 10);
+
+	ctx8.fillRect(456+60, 124, 1, 10);
+	ctx8.fillRect(480+60, 124, 1, 10);
+	ctx8.fillRect(504+60, 124, 1, 10);
+	ctx8.fillRect(528+60, 124, 1, 10);
+	ctx8.fillRect(552+60, 124, 1, 10);
+
+	ctx8.fillRect(60, 32, 580, 1);
+	ctx8.fillRect(60, 64, 580, 1);
+	ctx8.fillRect(60, 96, 580, 1);
+	ctx8.fillRect(60, 128, 580, 1);
+	ctx8.fillRect(60, 160, 580, 1);
+	ctx8.fillRect(60, 192, 580, 1);
+	ctx8.fillRect(60, 224, 580, 1);
+
 
 
 
@@ -618,7 +930,7 @@ if('serviceWorker' in navigator) {
 
 				calculate_sat_coords(sat_id, sat_elev, sat_azi);
 				ctx9.beginPath();
-				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 8, 0, 2 * Math.PI);
 				ctx9.fillStyle="#00d81a"; //green
 				ctx9.fill();
 			}	
@@ -639,7 +951,7 @@ if('serviceWorker' in navigator) {
 
 				calculate_sat_coords(sat_id, sat_elev, sat_azi);
 				ctx9.beginPath();
-				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 8, 0, 2 * Math.PI);
 				ctx9.fillStyle="#ffec02"; //yellow
 				ctx9.fill();
 			}	
@@ -660,7 +972,7 @@ if('serviceWorker' in navigator) {
 
 				calculate_sat_coords(sat_id, sat_elev, sat_azi);
 				ctx9.beginPath();
-				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 8, 0, 2 * Math.PI);
 				ctx9.fillStyle="red";
 				ctx9.fill();
 			}	
@@ -681,7 +993,7 @@ if('serviceWorker' in navigator) {
 
 				calculate_sat_coords(sat_id, sat_elev, sat_azi);
 				ctx9.beginPath();
-				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 10, 0, 2 * Math.PI);
+				ctx9.arc(340+(sat_x*299), 340+(sat_y*299), 8, 0, 2 * Math.PI);
 				ctx9.fillStyle="#00a6ff"; //blue
 				ctx9.fill();
 			}	
@@ -691,81 +1003,41 @@ if('serviceWorker' in navigator) {
 
 	
 
-		for(var i=0;i<12;i++) //draw fixed GPS satellite signal level
+		for(var i=0;i<20;i++) //draw fixed GPS satellite signal level
 		{
 			ctx10.fillStyle ="#00d81a"; //green
-			active_id=mic_var[i+1552];
-			if(active_id)
-			{
-				for(var j=0;j<100;j=j+5)
-				{
-					sat_id=mic_var[j+1152];
-					sat_level=mic_var[j+1156];
-				   	if(sat_id==active_id) break;
-				}
-
-				var height=sat_level*5.12;
-				ctx10.fillRect(60+(i*12), 257-height, 11, height);
-			}	
+			sat_level=mic_var[(i*5)+1156];
+			var height=sat_level*5.12;
+			ctx10.fillRect(60+(i*6), 257-height, 5, height);
 		}
 
 
 
-		for(var i=0;i<12;i++) //draw fixed BEI satellite signal level
+		for(var i=0;i<20;i++) //draw fixed BEI satellite signal level
 		{
 			ctx10.fillStyle = "#ffec02"; //yellow
-			active_id=mic_var[i+1552+12];
-			if(active_id)
-			{
-				for(var j=100;j<200;j=j+5)
-				{
-					sat_id=mic_var[j+1152];
-					sat_level=mic_var[j+1156];
-				   	if(sat_id==active_id) break;
-				}
-
-				var height=sat_level*5.12;
-				ctx10.fillRect(145+60+(i*12), 257-height, 11, height);
-			}	
+			sat_level=mic_var[(i*5)+1256];
+			var height=sat_level*5.12;
+			ctx10.fillRect(145+60+(i*6), 257-height, 5, height);	
 		}
 
 
 
-		for(var i=0;i<12;i++) //draw fixed GLO satellite signal level
+		for(var i=0;i<20;i++) //draw fixed GLO satellite signal level
 		{
 			ctx10.fillStyle = "red";
-			active_id=mic_var[i+1552+24];
-			if(active_id)
-			{
-				for(var j=200;j<300;j=j+5)
-				{
-					sat_id=mic_var[j+1152];
-					sat_level=mic_var[j+1156];
-				   	if(sat_id==active_id) break;
-				}
-
-				var height=sat_level*5.12;
-				ctx10.fillRect(289+60+(i*12), 257-height, 11, height);
-			}	
+			sat_level=mic_var[(i*5)+1356];
+			var height=sat_level*5.12;
+			ctx10.fillRect(289+60+(i*6), 257-height, 5, height);	
 		}
 
 
-		for(var i=0;i<12;i++) //draw fixed GAL satellite signal level
+		for(var i=0;i<20;i++) //draw fixed GAL satellite signal level
 		{
 			ctx10.fillStyle = "#00a6ff"; //blue
-			active_id=mic_var[i+1552+36];
-			if(active_id)
-			{
-				for(var j=300;j<400;j=j+5)
-				{
-					sat_id=mic_var[j+1152];
-					sat_level=mic_var[j+1156];
-				   	if(sat_id==active_id) break;
-				}
-
-				var height=sat_level*5.12;
-				ctx10.fillRect(433+60+(i*12), 257-height, 11, height);
-			}	
+			sat_level=mic_var[(i*5)+1456];
+			var height=sat_level*5.12;
+			ctx10.fillRect(433+60+(i*6), 257-height, 5, height);
 		}
 
 
@@ -775,53 +1047,46 @@ if('serviceWorker' in navigator) {
 
 	var latitude=mic_var[1601];
 	var sign=0;
-	if(latitude>127)
-	{
-		sign=1;
-		latitude+=-128;
-	}
+	if(latitude>127) sign=1;
 
-	latitude+=mic_var[1602]/100;
-	latitude+=mic_var[1603]/10000;
-	latitude+=mic_var[1604]/1000000;
+	latitude=mic_var[1602];
+	latitude+=mic_var[1603]/100;
+	latitude+=mic_var[1604]/10000;
+	latitude+=mic_var[1605]/1000000;
+
 	if(sign) latitude=-latitude;
 	let l=latitude.toFixed(6);
 
-	var longitude=mic_var[1605];
+	var longitude=mic_var[1606];
 	sign=0;
-	if(longitude>127)
-	{
-		sign=1;
-		longitude+=-128;
-	}
+	if(longitude>127) sign=1;
 
-	longitude=longitude*100;
-	longitude+=mic_var[1606];
-	longitude+=mic_var[1607]/100;
-	longitude+=mic_var[1608]/10000;
-	longitude+=mic_var[1609]/1000000;
+	longitude=mic_var[1607];
+	longitude+=mic_var[1608]/100;
+	longitude+=mic_var[1609]/10000;
+	longitude+=mic_var[1610]/1000000;
 	if(sign) longitude=-longitude;
 	let g=longitude.toFixed(6);
 
 	GPS_Position.innerHTML="<b>Global Position: " + l + ", " + g;
 
 	var month;
-	if(mic_var[1614]==1) month="Jan";
-	if(mic_var[1614]==2) month="Feb";
-	if(mic_var[1614]==3) month="Mar";
-	if(mic_var[1614]==4) month="Apr";
-	if(mic_var[1614]==5) month="May";
-	if(mic_var[1614]==6) month="Jun";
-	if(mic_var[1614]==7) month="Jul";
-	if(mic_var[1614]==8) month="Aug";
-	if(mic_var[1614]==9) month="Sep";
-	if(mic_var[1614]==10) month="Oct";
-	if(mic_var[1614]==11) month="Nov";
-	if(mic_var[1614]==12) month="Dec";
+	if(mic_var[1615]==1) month="Jan";
+	if(mic_var[1615]==2) month="Feb";
+	if(mic_var[1615]==3) month="Mar";
+	if(mic_var[1615]==4) month="Apr";
+	if(mic_var[1615]==5) month="May";
+	if(mic_var[1615]==6) month="Jun";
+	if(mic_var[1615]==7) month="Jul";
+	if(mic_var[1615]==8) month="Aug";
+	if(mic_var[1615]==9) month="Sep";
+	if(mic_var[1615]==10) month="Oct";
+	if(mic_var[1615]==11) month="Nov";
+	if(mic_var[1615]==12) month="Dec";
 
-	var year=mic_var[1615]+2000;
+	var year=mic_var[1616]+2000;
 
-	GPS_Time.innerHTML="<b>UCT <b/>" + mic_var[1610] + ":" + mic_var[1611] +  ":" + mic_var[1612] + "  "  + mic_var[1613] + "-" + month + "-" + year;
+	GPS_Time.innerHTML="<b>UCT <b/>" + mic_var[1611] + ":" + mic_var[1612] +  ":" + mic_var[1613] + "  "  + mic_var[1614] + "-" + month + "-" + year;
 
 
 
@@ -1063,29 +1328,29 @@ var x,y,amp,angle;
 	ctx1.fillRect(288+60, 1, 1, 256);
 	ctx1.fillRect(432+60, 1, 1, 256);
 
-	ctx1.fillRect(24+60, 1, 1, 10);
-	ctx1.fillRect(48+60, 1, 1, 10);
-	ctx1.fillRect(72+60, 1, 1, 10);
-	ctx1.fillRect(96+60, 1, 1, 10);
-	ctx1.fillRect(120+60, 1, 1, 10);
+	ctx1.fillRect(24+60, 248, 1, 10);
+	ctx1.fillRect(48+60, 248, 1, 10);
+	ctx1.fillRect(72+60, 248, 1, 10);
+	ctx1.fillRect(96+60, 248, 1, 10);
+	ctx1.fillRect(120+60, 248, 1, 10);
 
-	ctx1.fillRect(168+60, 1, 1, 10);
-	ctx1.fillRect(192+60, 1, 1, 10);
-	ctx1.fillRect(216+60, 1, 1, 10);
-	ctx1.fillRect(240+60, 1, 1, 10);
-	ctx1.fillRect(264+60, 1, 1, 10);
+	ctx1.fillRect(168+60, 248, 1, 10);
+	ctx1.fillRect(192+60, 248, 1, 10);
+	ctx1.fillRect(216+60, 248, 1, 10);
+	ctx1.fillRect(240+60, 248, 1, 10);
+	ctx1.fillRect(264+60, 248, 1, 10);
 
-	ctx1.fillRect(312+60, 1, 1, 10);
-	ctx1.fillRect(336+60, 1, 1, 10);
-	ctx1.fillRect(360+60, 1, 1, 10);
-	ctx1.fillRect(384+60, 1, 1, 10);
-	ctx1.fillRect(408+60, 1, 1, 10);
+	ctx1.fillRect(312+60, 248, 1, 10);
+	ctx1.fillRect(336+60, 248, 1, 10);
+	ctx1.fillRect(360+60, 248, 1, 10);
+	ctx1.fillRect(384+60, 248, 1, 10);
+	ctx1.fillRect(408+60, 248, 1, 10);
 
-	ctx1.fillRect(456+60, 1, 1, 10);
-	ctx1.fillRect(480+60, 1, 1, 10);
-	ctx1.fillRect(504+60, 1, 1, 10);
-	ctx1.fillRect(528+60, 1, 1, 10);
-	ctx1.fillRect(552+60, 1, 1, 10);
+	ctx1.fillRect(456+60, 248, 1, 10);
+	ctx1.fillRect(480+60, 248, 1, 10);
+	ctx1.fillRect(504+60, 248, 1, 10);
+	ctx1.fillRect(528+60, 248, 1, 10);
+	ctx1.fillRect(552+60, 248, 1, 10);
 
 
 //----------------------------------------------
@@ -1111,29 +1376,29 @@ var x,y,amp,angle;
 	ctx2.fillRect(288+60, 1, 1, 256);
 	ctx2.fillRect(432+60, 1, 1, 256);
 
-	ctx2.fillRect(24+60, 1, 1, 10);
-	ctx2.fillRect(48+60, 1, 1, 10);
-	ctx2.fillRect(72+60, 1, 1, 10);
-	ctx2.fillRect(96+60, 1, 1, 10);
-	ctx2.fillRect(120+60, 1, 1, 10);
+	ctx2.fillRect(24+60, 248, 1, 10);
+	ctx2.fillRect(48+60, 248, 1, 10);
+	ctx2.fillRect(72+60, 248, 1, 10);
+	ctx2.fillRect(96+60, 248, 1, 10);
+	ctx2.fillRect(120+60, 248, 1, 10);
 
-	ctx2.fillRect(168+60, 1, 1, 10);
-	ctx2.fillRect(192+60, 1, 1, 10);
-	ctx2.fillRect(216+60, 1, 1, 10);
-	ctx2.fillRect(240+60, 1, 1, 10);
-	ctx2.fillRect(264+60, 1, 1, 10);
+	ctx2.fillRect(168+60, 248, 1, 10);
+	ctx2.fillRect(192+60, 248, 1, 10);
+	ctx2.fillRect(216+60, 248, 1, 10);
+	ctx2.fillRect(240+60, 248, 1, 10);
+	ctx2.fillRect(264+60, 248, 1, 10);
 
-	ctx2.fillRect(312+60, 1, 1, 10);
-	ctx2.fillRect(336+60, 1, 1, 10);
-	ctx2.fillRect(360+60, 1, 1, 10);
-	ctx2.fillRect(384+60, 1, 1, 10);
-	ctx2.fillRect(408+60, 1, 1, 10);
+	ctx2.fillRect(312+60, 248, 1, 10);
+	ctx2.fillRect(336+60, 248, 1, 10);
+	ctx2.fillRect(360+60, 248, 1, 10);
+	ctx2.fillRect(384+60, 248, 1, 10);
+	ctx2.fillRect(408+60, 248, 1, 10);
 
-	ctx2.fillRect(456+60, 1, 1, 10);
-	ctx2.fillRect(480+60, 1, 1, 10);
-	ctx2.fillRect(504+60, 1, 1, 10);
-	ctx2.fillRect(528+60, 1, 1, 10);
-	ctx2.fillRect(552+60, 1, 1, 10);
+	ctx2.fillRect(456+60, 248, 1, 10);
+	ctx2.fillRect(480+60, 248, 1, 10);
+	ctx2.fillRect(504+60, 248, 1, 10);
+	ctx2.fillRect(528+60, 248, 1, 10);
+	ctx2.fillRect(552+60, 248, 1, 10);
 
 
 //----------------------------------------------
@@ -1144,14 +1409,13 @@ var x,y,amp,angle;
 	ctx3.font = "15px Arial";
 	ctx3.lineWidth = 1;
         ctx3.fillStyle="white";
-	ctx3.fillText("30", 35, 11);   
-	ctx3.fillText("25", 35, 37);   
-	ctx3.fillText("20", 35, 69);   
-	ctx3.fillText("15", 35, 101);   
-	ctx3.fillText("10", 35, 133);   
-	ctx3.fillText("5", 40, 165);   
-	ctx3.fillText("0", 40, 197);   
-	ctx3.fillText("-5", 35, 229);   
+	ctx3.fillText("50", 35, 11);   
+	ctx3.fillText("40", 35, 41);   
+	ctx3.fillText("30", 35, 78);   
+	ctx3.fillText("20", 35, 114);   
+	ctx3.fillText("10", 35, 151);   
+	ctx3.fillText("0", 40, 187);   
+	ctx3.fillText("-10", 30, 224); 
   
 	ctx3.fillStyle = "black";
 	
@@ -1159,29 +1423,29 @@ var x,y,amp,angle;
 	ctx3.fillRect(288+60, 1, 1, 256);
 	ctx3.fillRect(432+60, 1, 1, 256);
 
-	ctx3.fillRect(24+60, 1, 1, 10);
-	ctx3.fillRect(48+60, 1, 1, 10);
-	ctx3.fillRect(72+60, 1, 1, 10);
-	ctx3.fillRect(96+60, 1, 1, 10);
-	ctx3.fillRect(120+60, 1, 1, 10);
+	ctx3.fillRect(24+60, 248, 1, 10);
+	ctx3.fillRect(48+60, 248, 1, 10);
+	ctx3.fillRect(72+60, 248, 1, 10);
+	ctx3.fillRect(96+60, 248, 1, 10);
+	ctx3.fillRect(120+60, 248, 1, 10);
 
-	ctx3.fillRect(168+60, 1, 1, 10);
-	ctx3.fillRect(192+60, 1, 1, 10);
-	ctx3.fillRect(216+60, 1, 1, 10);
-	ctx3.fillRect(240+60, 1, 1, 10);
-	ctx3.fillRect(264+60, 1, 1, 10);
+	ctx3.fillRect(168+60, 248, 1, 10);
+	ctx3.fillRect(192+60, 248, 1, 10);
+	ctx3.fillRect(216+60, 248, 1, 10);
+	ctx3.fillRect(240+60, 248, 1, 10);
+	ctx3.fillRect(264+60, 248, 1, 10);
 
-	ctx3.fillRect(312+60, 1, 1, 10);
-	ctx3.fillRect(336+60, 1, 1, 10);
-	ctx3.fillRect(360+60, 1, 1, 10);
-	ctx3.fillRect(384+60, 1, 1, 10);
-	ctx3.fillRect(408+60, 1, 1, 10);
+	ctx3.fillRect(312+60, 248, 1, 10);
+	ctx3.fillRect(336+60, 248, 1, 10);
+	ctx3.fillRect(360+60, 248, 1, 10);
+	ctx3.fillRect(384+60, 248, 1, 10);
+	ctx3.fillRect(408+60, 248, 1, 10);
 
-	ctx3.fillRect(456+60, 1, 1, 10);
-	ctx3.fillRect(480+60, 1, 1, 10);
-	ctx3.fillRect(504+60, 1, 1, 10);
-	ctx3.fillRect(528+60, 1, 1, 10);
-	ctx3.fillRect(552+60, 1, 1, 10);
+	ctx3.fillRect(456+60, 248, 1, 10);
+	ctx3.fillRect(480+60, 248, 1, 10);
+	ctx3.fillRect(504+60, 248, 1, 10);
+	ctx3.fillRect(528+60, 248, 1, 10);
+	ctx3.fillRect(552+60, 248, 1, 10);
 
 
 //----------------------------------------------
@@ -1207,29 +1471,29 @@ var x,y,amp,angle;
 	ctx4.fillRect(288+60, 1, 1, 256);
 	ctx4.fillRect(432+60, 1, 1, 256);
 
-	ctx4.fillRect(24+60, 1, 1, 10);
-	ctx4.fillRect(48+60, 1, 1, 10);
-	ctx4.fillRect(72+60, 1, 1, 10);
-	ctx4.fillRect(96+60, 1, 1, 10);
-	ctx4.fillRect(120+60, 1, 1, 10);
+	ctx4.fillRect(24+60, 248, 1, 10);
+	ctx4.fillRect(48+60, 248, 1, 10);
+	ctx4.fillRect(72+60, 248, 1, 10);
+	ctx4.fillRect(96+60, 248, 1, 10);
+	ctx4.fillRect(120+60, 248, 1, 10);
 
-	ctx4.fillRect(168+60, 1, 1, 10);
-	ctx4.fillRect(192+60, 1, 1, 10);
-	ctx4.fillRect(216+60, 1, 1, 10);
-	ctx4.fillRect(240+60, 1, 1, 10);
-	ctx4.fillRect(264+60, 1, 1, 10);
+	ctx4.fillRect(168+60, 248, 1, 10);
+	ctx4.fillRect(192+60, 248, 1, 10);
+	ctx4.fillRect(216+60, 248, 1, 10);
+	ctx4.fillRect(240+60, 248, 1, 10);
+	ctx4.fillRect(264+60, 248, 1, 10);
 
-	ctx4.fillRect(312+60, 1, 1, 10);
-	ctx4.fillRect(336+60, 1, 1, 10);
-	ctx4.fillRect(360+60, 1, 1, 10);
-	ctx4.fillRect(384+60, 1, 1, 10);
-	ctx4.fillRect(408+60, 1, 1, 10);
+	ctx4.fillRect(312+60, 248, 1, 10);
+	ctx4.fillRect(336+60, 248, 1, 10);
+	ctx4.fillRect(360+60, 248, 1, 10);
+	ctx4.fillRect(384+60, 248, 1, 10);
+	ctx4.fillRect(408+60, 248, 1, 10);
 
-	ctx4.fillRect(456+60, 1, 1, 10);
-	ctx4.fillRect(480+60, 1, 1, 10);
-	ctx4.fillRect(504+60, 1, 1, 10);
-	ctx4.fillRect(528+60, 1, 1, 10);
-	ctx4.fillRect(552+60, 1, 1, 10); 
+	ctx4.fillRect(456+60, 248, 1, 10);
+	ctx4.fillRect(480+60, 248, 1, 10);
+	ctx4.fillRect(504+60, 248, 1, 10);
+	ctx4.fillRect(528+60, 248, 1, 10);
+	ctx4.fillRect(552+60, 248, 1, 10);
 
 //----------------------------------------------
 
@@ -1239,14 +1503,14 @@ var x,y,amp,angle;
 	ctx5.font = "15px Arial";
 	ctx5.lineWidth = 1;
         ctx5.fillStyle="white";
-	ctx5.fillText("1.0", 32, 11);   
-	ctx5.fillText("0.75", 24, 37);   
-	ctx5.fillText("0.50", 24, 69);   
-	ctx5.fillText("0.25", 24, 101);   
-	ctx5.fillText("0", 44, 133);   
-	ctx5.fillText("-0.25", 20, 165);   
-	ctx5.fillText("-0.50", 20, 197);   
-	ctx5.fillText("-0.75", 20, 229);   
+	ctx5.fillText("2.0", 32, 11);   
+	ctx5.fillText("1.75", 24, 37);   
+	ctx5.fillText("1.50", 24, 69);   
+	ctx5.fillText("1.25", 24, 101);   
+	ctx5.fillText("1.0", 32, 133);   
+	ctx5.fillText("0.75", 20, 165);   
+	ctx5.fillText("0.50", 20, 197);   
+	ctx5.fillText("0.25", 20, 229);   
   
 	ctx5.fillStyle = "black";
 	
@@ -1254,29 +1518,30 @@ var x,y,amp,angle;
 	ctx5.fillRect(288+60, 1, 1, 256);
 	ctx5.fillRect(432+60, 1, 1, 256);
 
-	ctx5.fillRect(24+60, 1, 1, 10);
-	ctx5.fillRect(48+60, 1, 1, 10);
-	ctx5.fillRect(72+60, 1, 1, 10);
-	ctx5.fillRect(96+60, 1, 1, 10);
-	ctx5.fillRect(120+60, 1, 1, 10);
+	ctx5.fillRect(24+60, 248, 1, 10);
+	ctx5.fillRect(48+60, 248, 1, 10);
+	ctx5.fillRect(72+60, 248, 1, 10);
+	ctx5.fillRect(96+60, 248, 1, 10);
+	ctx5.fillRect(120+60, 248, 1, 10);
 
-	ctx5.fillRect(168+60, 1, 1, 10);
-	ctx5.fillRect(192+60, 1, 1, 10);
-	ctx5.fillRect(216+60, 1, 1, 10);
-	ctx5.fillRect(240+60, 1, 1, 10);
-	ctx5.fillRect(264+60, 1, 1, 10);
+	ctx5.fillRect(168+60, 248, 1, 10);
+	ctx5.fillRect(192+60, 248, 1, 10);
+	ctx5.fillRect(216+60, 248, 1, 10);
+	ctx5.fillRect(240+60, 248, 1, 10);
+	ctx5.fillRect(264+60, 248, 1, 10);
 
-	ctx5.fillRect(312+60, 1, 1, 10);
-	ctx5.fillRect(336+60, 1, 1, 10);
-	ctx5.fillRect(360+60, 1, 1, 10);
-	ctx5.fillRect(384+60, 1, 1, 10);
-	ctx5.fillRect(408+60, 1, 1, 10);
+	ctx5.fillRect(312+60, 248, 1, 10);
+	ctx5.fillRect(336+60, 248, 1, 10);
+	ctx5.fillRect(360+60, 248, 1, 10);
+	ctx5.fillRect(384+60, 248, 1, 10);
+	ctx5.fillRect(408+60, 248, 1, 10);
 
-	ctx5.fillRect(456+60, 1, 1, 10);
-	ctx5.fillRect(480+60, 1, 1, 10);
-	ctx5.fillRect(504+60, 1, 1, 10);
-	ctx5.fillRect(528+60, 1, 1, 10);
-	ctx5.fillRect(552+60, 1, 1, 10); 
+	ctx5.fillRect(456+60, 248, 1, 10);
+	ctx5.fillRect(480+60, 248, 1, 10);
+	ctx5.fillRect(504+60, 248, 1, 10);
+	ctx5.fillRect(528+60, 248, 1, 10);
+	ctx5.fillRect(552+60, 248, 1, 10);
+
 
 //----------------------------------------------
 
@@ -1302,29 +1567,30 @@ var x,y,amp,angle;
 	ctx6.fillRect(288+60, 1, 1, 256);
 	ctx6.fillRect(432+60, 1, 1, 256);
 
-	ctx6.fillRect(24+60, 1, 1, 10);
-	ctx6.fillRect(48+60, 1, 1, 10);
-	ctx6.fillRect(72+60, 1, 1, 10);
-	ctx6.fillRect(96+60, 1, 1, 10);
-	ctx6.fillRect(120+60, 1, 1, 10);
+	ctx6.fillRect(24+60, 248, 1, 10);
+	ctx6.fillRect(48+60, 248, 1, 10);
+	ctx6.fillRect(72+60, 248, 1, 10);
+	ctx6.fillRect(96+60, 248, 1, 10);
+	ctx6.fillRect(120+60, 248, 1, 10);
 
-	ctx6.fillRect(168+60, 1, 1, 10);
-	ctx6.fillRect(192+60, 1, 1, 10);
-	ctx6.fillRect(216+60, 1, 1, 10);
-	ctx6.fillRect(240+60, 1, 1, 10);
-	ctx6.fillRect(264+60, 1, 1, 10);
+	ctx6.fillRect(168+60, 248, 1, 10);
+	ctx6.fillRect(192+60, 248, 1, 10);
+	ctx6.fillRect(216+60, 248, 1, 10);
+	ctx6.fillRect(240+60, 248, 1, 10);
+	ctx6.fillRect(264+60, 248, 1, 10);
 
-	ctx6.fillRect(312+60, 1, 1, 10);
-	ctx6.fillRect(336+60, 1, 1, 10);
-	ctx6.fillRect(360+60, 1, 1, 10);
-	ctx6.fillRect(384+60, 1, 1, 10);
-	ctx6.fillRect(408+60, 1, 1, 10);
+	ctx6.fillRect(312+60, 248, 1, 10);
+	ctx6.fillRect(336+60, 248, 1, 10);
+	ctx6.fillRect(360+60, 248, 1, 10);
+	ctx6.fillRect(384+60, 248, 1, 10);
+	ctx6.fillRect(408+60, 248, 1, 10);
 
-	ctx6.fillRect(456+60, 1, 1, 10);
-	ctx6.fillRect(480+60, 1, 1, 10);
-	ctx6.fillRect(504+60, 1, 1, 10);
-	ctx6.fillRect(528+60, 1, 1, 10);
-	ctx6.fillRect(552+60, 1, 1, 10);
+	ctx6.fillRect(456+60, 248, 1, 10);
+	ctx6.fillRect(480+60, 248, 1, 10);
+	ctx6.fillRect(504+60, 248, 1, 10);
+	ctx6.fillRect(528+60, 248, 1, 10);
+	ctx6.fillRect(552+60, 248, 1, 10);
+
 
 //----------------------------------------------
 
@@ -1349,29 +1615,29 @@ var x,y,amp,angle;
 	ctx7.fillRect(288+60, 1, 1, 256);
 	ctx7.fillRect(432+60, 1, 1, 256);
 
-	ctx7.fillRect(24+60, 1, 1, 10);
-	ctx7.fillRect(48+60, 1, 1, 10);
-	ctx7.fillRect(72+60, 1, 1, 10);
-	ctx7.fillRect(96+60, 1, 1, 10);
-	ctx7.fillRect(120+60, 1, 1, 10);
+	ctx7.fillRect(24+60, 248, 1, 10);
+	ctx7.fillRect(48+60, 248, 1, 10);
+	ctx7.fillRect(72+60, 248, 1, 10);
+	ctx7.fillRect(96+60, 248, 1, 10);
+	ctx7.fillRect(120+60, 248, 1, 10);
 
-	ctx7.fillRect(168+60, 1, 1, 10);
-	ctx7.fillRect(192+60, 1, 1, 10);
-	ctx7.fillRect(216+60, 1, 1, 10);
-	ctx7.fillRect(240+60, 1, 1, 10);
-	ctx7.fillRect(264+60, 1, 1, 10);
+	ctx7.fillRect(168+60, 248, 1, 10);
+	ctx7.fillRect(192+60, 248, 1, 10);
+	ctx7.fillRect(216+60, 248, 1, 10);
+	ctx7.fillRect(240+60, 248, 1, 10);
+	ctx7.fillRect(264+60, 248, 1, 10);
 
-	ctx7.fillRect(312+60, 1, 1, 10);
-	ctx7.fillRect(336+60, 1, 1, 10);
-	ctx7.fillRect(360+60, 1, 1, 10);
-	ctx7.fillRect(384+60, 1, 1, 10);
-	ctx7.fillRect(408+60, 1, 1, 10);
+	ctx7.fillRect(312+60, 248, 1, 10);
+	ctx7.fillRect(336+60, 248, 1, 10);
+	ctx7.fillRect(360+60, 248, 1, 10);
+	ctx7.fillRect(384+60, 248, 1, 10);
+	ctx7.fillRect(408+60, 248, 1, 10);
 
-	ctx7.fillRect(456+60, 1, 1, 10);
-	ctx7.fillRect(480+60, 1, 1, 10);
-	ctx7.fillRect(504+60, 1, 1, 10);
-	ctx7.fillRect(528+60, 1, 1, 10);
-	ctx7.fillRect(552+60, 1, 1, 10);
+	ctx7.fillRect(456+60, 248, 1, 10);
+	ctx7.fillRect(480+60, 248, 1, 10);
+	ctx7.fillRect(504+60, 248, 1, 10);
+	ctx7.fillRect(528+60, 248, 1, 10);
+	ctx7.fillRect(552+60, 248, 1, 10);
 
 //----------------------------------------------
 
@@ -1381,14 +1647,14 @@ var x,y,amp,angle;
 	ctx8.font = "15px Arial";
 	ctx8.lineWidth = 1;
         ctx8.fillStyle="white";
-	ctx8.fillText("20", 35, 11);   
-	ctx8.fillText("15", 35, 37);   
-	ctx8.fillText("10", 35, 69);   
-	ctx8.fillText("5", 40, 101);   
+	ctx8.fillText("20.8", 20, 11);   
+	ctx8.fillText("15.6", 20, 37);   
+	ctx8.fillText("10.4", 20, 69);   
+	ctx8.fillText("5.2", 25, 101);   
 	ctx8.fillText("0", 40, 133);   
-	ctx8.fillText("-5", 35, 165);   
-	ctx8.fillText("-10", 30, 197);   
-	ctx8.fillText("-15", 30, 229);   
+	ctx8.fillText("-5.2", 20, 165);   
+	ctx8.fillText("-10.4", 15, 197);   
+	ctx8.fillText("-15.6", 15, 229);   
   
 	ctx8.fillStyle = "black";
 	
@@ -1396,29 +1662,31 @@ var x,y,amp,angle;
 	ctx8.fillRect(288+60, 1, 1, 256);
 	ctx8.fillRect(432+60, 1, 1, 256);
 
-	ctx8.fillRect(24+60, 1, 1, 10);
-	ctx8.fillRect(48+60, 1, 1, 10);
-	ctx8.fillRect(72+60, 1, 1, 10);
-	ctx8.fillRect(96+60, 1, 1, 10);
-	ctx8.fillRect(120+60, 1, 1, 10);
+	ctx8.fillRect(24+60, 124, 1, 10);
+	ctx8.fillRect(48+60, 124, 1, 10);
+	ctx8.fillRect(72+60, 124, 1, 10);
+	ctx8.fillRect(96+60, 124, 1, 10);
+	ctx8.fillRect(120+60, 124, 1, 10);
 
-	ctx8.fillRect(168+60, 1, 1, 10);
-	ctx8.fillRect(192+60, 1, 1, 10);
-	ctx8.fillRect(216+60, 1, 1, 10);
-	ctx8.fillRect(240+60, 1, 1, 10);
-	ctx8.fillRect(264+60, 1, 1, 10);
+	ctx8.fillRect(168+60, 124, 1, 10);
+	ctx8.fillRect(192+60, 124, 1, 10);
+	ctx8.fillRect(216+60, 124, 1, 10);
+	ctx8.fillRect(240+60, 124, 1, 10);
+	ctx8.fillRect(264+60, 124, 1, 10);
 
-	ctx8.fillRect(312+60, 1, 1, 10);
-	ctx8.fillRect(336+60, 1, 1, 10);
-	ctx8.fillRect(360+60, 1, 1, 10);
-	ctx8.fillRect(384+60, 1, 1, 10);
-	ctx8.fillRect(408+60, 1, 1, 10);
+	ctx8.fillRect(312+60, 124, 1, 10);
+	ctx8.fillRect(336+60, 124, 1, 10);
+	ctx8.fillRect(360+60, 124, 1, 10);
+	ctx8.fillRect(384+60, 124, 1, 10);
+	ctx8.fillRect(408+60, 124, 1, 10);
 
-	ctx8.fillRect(456+60, 1, 1, 10);
-	ctx8.fillRect(480+60, 1, 1, 10);
-	ctx8.fillRect(504+60, 1, 1, 10);
-	ctx8.fillRect(528+60, 1, 1, 10);
-	ctx8.fillRect(552+60, 1, 1, 10);
+	ctx8.fillRect(456+60, 124, 1, 10);
+	ctx8.fillRect(480+60, 124, 1, 10);
+	ctx8.fillRect(504+60, 124, 1, 10);
+	ctx8.fillRect(528+60, 124, 1, 10);
+	ctx8.fillRect(552+60, 124, 1, 10);
+
+	ctx8.fillRect(60, 128, 580, 1);
 
 //----------- Initialise Satellite Constellation Graph -----------------
 
@@ -1441,28 +1709,28 @@ var x,y,amp,angle;
 
 
 	ctx9.beginPath();
-	ctx9.arc(20, 20, 10, 0, 2 * Math.PI);
+	ctx9.arc(20, 20, 8, 0, 2 * Math.PI);
 	ctx9.fillStyle="#00d81a"; //green
 	ctx9.fill();
 	ctx9.fillStyle="white";
 	ctx9.fillText("= USA", 37, 27);  
 
 	ctx9.beginPath();
-	ctx9.arc(20, 45, 10, 0, 2 * Math.PI);
+	ctx9.arc(20, 45, 8, 0, 2 * Math.PI);
 	ctx9.fillStyle="#ffec02"; //yellow
 	ctx9.fill();
 	ctx9.fillStyle="white";
 	ctx9.fillText("= China", 37, 52);  
 
 	ctx9.beginPath();
-	ctx9.arc(20, 70, 10, 0, 2 * Math.PI);
+	ctx9.arc(20, 70, 8, 0, 2 * Math.PI);
 	ctx9.fillStyle="red"; //red
 	ctx9.fill();
 	ctx9.fillStyle="white";
 	ctx9.fillText("= Russia", 37, 77);  
 
 	ctx9.beginPath();
-	ctx9.arc(20, 95, 10, 0, 2 * Math.PI);
+	ctx9.arc(20, 95, 8, 0, 2 * Math.PI);
 	ctx9.fillStyle="#00a6ff"; //blue
 	ctx9.fill();
 	ctx9.fillStyle="white";
@@ -1477,11 +1745,11 @@ var x,y,amp,angle;
 	ctx9.fillText("Visible", 610, 27);  
 
 	ctx9.beginPath();
-	ctx9.arc(590, 45, 10, 0, 2 * Math.PI);
+	ctx9.arc(590, 45, 8, 0, 2 * Math.PI);
 	ctx9.fillStyle="#00d81a"; //green
 	ctx9.fill();
 	ctx9.fillStyle="white";
-	ctx9.fillText("Fixed", 610, 52);  
+	ctx9.fillText("In use", 610, 52);  
 
 
 //------- Initialise Satellite Signal Level Graph -----------------
